@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+
+<?import java.lang.String?>
+<BorderPane maxHeight="800" maxWidth="1000" minHeight="400" minWidth="700" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Controller">
+    <top>
+        <VBox prefHeight="31.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar>
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#newMenuClicked" text="New">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <Menu mnemonicParsing="false" text="Backup">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="Import">
+                                            <accelerator>
+                                                <KeyCodeCombination alt="UP" code="I" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                            </accelerator>
+                                        </MenuItem>
+                                        <MenuItem mnemonicParsing="false" text="Export">
+                                            <accelerator>
+                                                <KeyCodeCombination alt="UP" code="E" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                            </accelerator>
+                                        </MenuItem>
+                                    </items>
+                                </Menu>
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem mnemonicParsing="false" onAction="#closeMenuClicked" text="Close">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="Q" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#selectAllMenuClicked" text="Select All">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="A" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem onAction="#copyMenuClicked" text="Copy">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="C" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#pasteMenuClicked" text="Paste">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="V" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#deleteMenuClicked" text="Delete">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="DOWN" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#aboutMenuClicked" text="About" />
+                                <MenuItem mnemonicParsing="false" onAction="#helpMenuClicked" text="Help" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <ToolBar>
+                    <items>
+                        <ComboBox fx:id="comboBoxLang" prefHeight="26.0" prefWidth="80.0" promptText="Lang" >
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Java" />
+                                    <String fx:value="C" />
+                                    <String fx:value="C#" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <Button fx:id="btnNew" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#newButtonClicked" text="+" textAlignment="CENTER" />
+                        <Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveButtonSnippetClicked" text="Save" translateX="-100.0" visible="false" />
+                        <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancelButtonSnippetClicked" text="Cancel" translateX="-100.0" visible="false" />
+                        <TextField fx:id="textFieldNewSnippet" promptText="SnippetName" translateX="-100.0" visible="false" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="textFieldSearch" prefHeight="26.0" prefWidth="134.0" promptText="Search" />
+                        <Button fx:id="btnSearch" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#searchButtonClicked" text="Search" />
+                        <Button fx:id="btnSetting" mnemonicParsing="false" onAction="#handleButtonSettingAction" text="Setting" />
+                    </items>
+                </ToolBar>
+            </children>
+        </VBox>
+    </top>
+    <left>
+        <TreeView fx:id="treeView" BorderPane.alignment="CENTER" />
+    </left>
+    <bottom>
+        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Statusleiste" textAlignment="CENTER" />
+            </children>
+        </HBox>
+    </bottom>
+    <center>
+        <TextArea fx:id="textAreaCode" editable="false" text="Code" wrapText="true" BorderPane.alignment="CENTER" />
+    </center>
+    <right>
+        <VBox prefHeight="313.0" prefWidth="207.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="labelNote" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="143.0" text=" Notizen / Anmerkungen" textAlignment="CENTER" translateX="30.0" />
+                <TextArea fx:id="textAreaNote" text="Anmerkung zu ausgewähltem &#10;Codeschnipsel" wrapText="true" VBox.vgrow="SOMETIMES" />
+                <Label fx:id="labelEdit" text="letzte Änderungen" translateX="50.0" />
+                <TextArea fx:id="textAreaLegend" editable="false" text="Quelle:&#10;Autor:&#10;Erstellungsdatum:" wrapText="true" VBox.vgrow="ALWAYS" />
+            </children>
+        </VBox>
+    </right>
+</BorderPane>
