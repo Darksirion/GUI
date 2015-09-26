@@ -1,27 +1,25 @@
 package Codehaufen.filetreeviewsample;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import static java.nio.file.StandardWatchEventKinds.*;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
 import javafx.concurrent.Task;
+
+import java.nio.file.*;
+
+import static java.nio.file.StandardWatchEventKinds.*;
 
 /**
  * This refers to this site http://docs.oracle.com/javase/tutorial/essential/io/notification.html
  * I just wanted to bind this result to JavaFX UI control(TextArea)
- * 
+ *
  * @author tomo
  */
-public class WatchTask extends Task<Void>{
+public class WatchTask extends Task<Void> {
     private Path path;
     private StringBuilder message = new StringBuilder();
 
     public WatchTask(Path path) {
         this.path = path;
     }
-    
+
     @Override
     protected Void call() throws Exception {
         WatchService watcher = FileSystems.getDefault().newWatchService();
@@ -63,5 +61,5 @@ public class WatchTask extends Task<Void>{
             return " is deleted";
         }
         return " is updated";
-    }    
+    }
 }

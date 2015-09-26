@@ -1,5 +1,9 @@
 package Codehaufen.filetreeviewsample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -7,14 +11,11 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TreeItem;
 
 /**
  * This refers to this site http://docs.oracle.com/javafx/2/api/index.html
  * I just wanted to use Path insted of File
- * 
+ *
  * @author tomo
  */
 public class PathTreeItem extends TreeItem<PathItem> {

@@ -9,14 +9,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
  * Created by Darksirion on 13.09.15.
  */
-public class SettingController implements Initializable{
+public class SettingController implements Initializable {
 
 
     @FXML
@@ -50,18 +49,17 @@ public class SettingController implements Initializable{
     private boolean[] checkBox = new boolean[4];
 
 
-
     public void saveButtonSettingClicked() {
         //save Setting speichern und Setting Window close
         String settingCheckbox = "";
-       // int[] setting = new int[4];
+        // int[] setting = new int[4];
 
         if (checkBoxSetting1.isSelected()) {
             //settingCheckbox += 1;
             setting[0] = 1;
         } else if (!checkBoxSetting1.isSelected()) {
             //settingCheckbox += 0;
-            setting[0] =0;
+            setting[0] = 0;
         }
         if (checkBoxSetting2.isSelected()) {
             //settingCheckbox += 1;
@@ -71,17 +69,17 @@ public class SettingController implements Initializable{
             setting[1] = 0;
         }
         if (checkBoxSetting3.isSelected()) {
-           // settingCheckbox += 1;
+            // settingCheckbox += 1;
             setting[2] = 1;
         } else if (!checkBoxSetting3.isSelected()) {
-           // settingCheckbox += 0;
+            // settingCheckbox += 0;
             setting[2] = 0;
         }
         if (checkBoxSetting4.isSelected()) {
-           // settingCheckbox += 1;
+            // settingCheckbox += 1;
             setting[3] = 1;
         } else if (!checkBoxSetting4.isSelected()) {
-           // settingCheckbox += 0;
+            // settingCheckbox += 0;
             setting[3] = 0;
         }
 
@@ -100,21 +98,24 @@ public class SettingController implements Initializable{
         System.out.println("Cancel");
 
         boolean answer = Dialog.confirm("Exit", "Wollen sie das Programm wirklich beenden?");
-        if(answer)
+        if (answer)
             settingStage.close();
     }
 
-    public int[] getSetting(){
-        int [] setting = checkBox();
+    public int[] getSetting() {
+        int[] setting = checkBox();
         return setting;
     }
 
-     public void setStage(Stage settingStage)
-     {
-          this.settingStage = settingStage;
-      }
+    public void setSetting(int[] setting) {
+        this.setting = setting;
+    }
 
-    private int[] checkBox(){
+    public void setStage(Stage settingStage) {
+        this.settingStage = settingStage;
+    }
+
+    private int[] checkBox() {
 
 
         if (checkBoxSetting1.isSelected()) {
@@ -122,7 +123,7 @@ public class SettingController implements Initializable{
             setting[0] = 1;
         } else if (!checkBoxSetting1.isSelected()) {
             //settingCheckbox += 0;
-            setting[0] =0;
+            setting[0] = 0;
         }
         if (checkBoxSetting2.isSelected()) {
             //settingCheckbox += 1;
@@ -149,19 +150,18 @@ public class SettingController implements Initializable{
         return setting;
     }
 
-    public boolean[] loadSetting(int[]setting){
+    public boolean[] loadSetting(int[] setting) {
 
-        for (int i =0; i < 4;i++) {
+        for (int i = 0; i < 4; i++) {
 
-                if (setting[i] != 0) {
-                    System.out.println(setting[i]);
-                    checkBox[i] = true;
-                }
-                else{
-                    System.out.println(setting[i]);
-                    checkBox [i]= false;
-                    }
-                    System.out.println(checkBox[i]);
+            if (setting[i] != 0) {
+                System.out.println(setting[i]);
+                checkBox[i] = true;
+            } else {
+                System.out.println(setting[i]);
+                checkBox[i] = false;
+            }
+            System.out.println(checkBox[i]);
 
 
         }
@@ -169,14 +169,9 @@ public class SettingController implements Initializable{
 
     }
 
-    public void setSetting(int[] setting) {
-        this.setting = setting;
-    }
-
     public void initialize(URL url, ResourceBundle rb) {
         loadSetting(setting);
         setSetting(setting);
-
 
 
         checkBoxSetting1.setSelected(checkBox[0]);
@@ -241,22 +236,26 @@ public class SettingController implements Initializable{
 
             if (newKey != null) {
                 switch (newKey) {
-                    case "New": String selection = newKey;
-                       // System.out.println(selection);
+                    case "New":
+                        String selection = newKey;
+                        // System.out.println(selection);
 
                         break;
-                    case "Close": selection = newKey;
+                    case "Close":
+                        selection = newKey;
 
 
                         break;
-                    case "Copy": selection = newKey;
+                    case "Copy":
+                        selection = newKey;
                         selection = newKey;
 
                         ;
                         System.out.println(newKey);
 
                         break;
-                    case "Paste": selection = newKey;
+                    case "Paste":
+                        selection = newKey;
 
                         System.out.println(newKey);
                         ;

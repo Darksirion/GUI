@@ -12,6 +12,13 @@ public class Core {
 	DirectoryClassLoader loader;
 	Proxy proxy;
 
+	public Core() {
+		loader = new DirectoryClassLoader("./root");
+		proxy = new Proxy(this);
+		// shadow proxy
+
+	}
+
 	public void search() {
 
 	}
@@ -21,11 +28,11 @@ public class Core {
 		Date datum = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance();
 		String formatString = dateFormat.format(datum);
-		
+
 		String sprache = proxy.getSprache();
 		try {
-			String newKey =parentPath + name;
-			
+			String newKey = parentPath + name;
+
 			loader.saveSnippet(new Snippet(name, formatString, code, sprache, notizen, quellen, author, newKey));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -36,7 +43,7 @@ public class Core {
 	public void deleteSnippet(String primaryKey) {
 		loader.deleteSnippet(primaryKey);
 	}
-	
+
 	public Snippet getSnippet(String primaryKey) throws IOException {
 		return loader.getSnippet(primaryKey);
 	}
@@ -64,20 +71,13 @@ public class Core {
 		loader.renameFile(oldName, newName);
 		;
 	}
-	
+
 	public void deleteDirectory(String primaryKey) {
 		loader.deleteSnippet(primaryKey);
 	}
-	
+
 	public void exit() {
 		int[] settings = proxy.getSettings();
-	}
-
-	public Core() {
-		loader = new DirectoryClassLoader("./root");
-		proxy = new Proxy(this);
-		// shadow proxy
-
 	}
 
     public Proxy getProxy() {

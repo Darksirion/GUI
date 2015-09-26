@@ -1,10 +1,5 @@
 package Codehaufen.filetreeviewsample;
 
-import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -12,15 +7,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class PathTreeCell extends TreeCell<PathItem>{
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class PathTreeCell extends TreeCell<PathItem> {
     private TextField textField;
     private Path editingPath;
     private StringProperty messageProp;
@@ -40,14 +37,15 @@ public class PathTreeCell extends TreeCell<PathItem>{
             public void handle(ActionEvent t) {
                 expandTreeItem(getTreeItem());
             }
+
             private void expandTreeItem(TreeItem<PathItem> item) {
-                if (item.isLeaf()){
+                if (item.isLeaf()) {
                     return;
                 }
                 item.setExpanded(true);
                 ObservableList<TreeItem<PathItem>> children = item.getChildren();
                 children.stream().filter(child -> (!child.isLeaf()))
-                    .forEach(child -> expandTreeItem(child));
+                        .forEach(child -> expandTreeItem(child));
             }
         });
         MenuItem addMenu = new MenuItem("Add Directory");
@@ -60,6 +58,7 @@ public class PathTreeCell extends TreeCell<PathItem>{
                     getTreeItem().getChildren().add(addItem);
                 }
             }
+
             private Path createNewDirectory() {
                 Path newDir = null;
                 while (true) {
@@ -76,17 +75,17 @@ public class PathTreeCell extends TreeCell<PathItem>{
                         break;
                     }
                 }
-                    return newDir;
+                return newDir;
             }
         });
-        MenuItem deleteMenu =new MenuItem("Delete");
+        MenuItem deleteMenu = new MenuItem("Delete");
         deleteMenu.setOnAction((ActionEvent event) -> {
             ObjectProperty<TreeItem<PathItem>> prop = new SimpleObjectProperty<>();
             new ModalDialog(/*owner, */getTreeItem(), prop);
             prop.addListener((ObservableValue<? extends TreeItem<PathItem>> ov, TreeItem<PathItem> oldItem, TreeItem<PathItem> newItem) -> {
                 try {
                     Files.walkFileTree(newItem.getValue().getPath(), new VisitorForDelete());
-                    if (getTreeItem().getParent() == null){
+                    if (getTreeItem().getParent() == null) {
                         // when the root is deleted how to clear the TreeView???
                     } else {
                         getTreeItem().getParent().getChildren().remove(newItem);
@@ -128,7 +127,7 @@ public class PathTreeCell extends TreeCell<PathItem>{
     @Override
     public void startEdit() {
         super.startEdit();
-        if (textField == null){
+        if (textField == null) {
             createTextField();
         }
         setText(null);
@@ -137,7 +136,7 @@ public class PathTreeCell extends TreeCell<PathItem>{
         if (getItem() == null) {
             editingPath = null;
         } else {
-            editingPath =getItem().getPath();
+            editingPath = getItem().getPath();
         }
     }
 
@@ -169,7 +168,7 @@ public class PathTreeCell extends TreeCell<PathItem>{
     private void createTextField() {
         textField = new TextField(getString());
         textField.setOnKeyReleased((KeyEvent t) -> {
-            if (t.getCode() == KeyCode.ENTER){
+            if (t.getCode() == KeyCode.ENTER) {
                 Path path = Paths.get(getItem().getPath().getParent().toAbsolutePath().toString(), textField.getText());
                 commitEdit(new PathItem(path));
             } else if (t.getCode() == KeyCode.ESCAPE) {

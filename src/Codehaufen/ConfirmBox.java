@@ -19,7 +19,7 @@ public class ConfirmBox {
 
     static boolean answer;
 
-    public static boolean display(String title, String message){
+    public static boolean display(String title, String message) {
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
@@ -38,7 +38,7 @@ public class ConfirmBox {
             window.close();
         });
 
-        noButton.setOnAction(e  -> {
+        noButton.setOnAction(e -> {
             answer = false;
             window.close();
         });
@@ -47,17 +47,16 @@ public class ConfirmBox {
 
 
         HBox layout = new HBox();
-        layout.getChildren().addAll(yesButton,noButton);
+        layout.getChildren().addAll(yesButton, noButton);
         layout.setAlignment(Pos.CENTER);    //pending einfügen
         boarderpane.setCenter(layout);
 
 
-
-        Scene scene= new Scene(boarderpane);
+        Scene scene = new Scene(boarderpane);
         window.setScene(scene);
         window.showAndWait();
 
-    return answer;
+        return answer;
     }
 
 }

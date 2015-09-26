@@ -1,6 +1,6 @@
 package Test;
 
-import Codehaufen.filetreeviewsample.FileTreeViewSample;
+import Core.StartUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 /**
  * This refers to this site http://docs.oracle.com/javafx/2/api/index.html
  * I just wanted to use Path insted of File
- * 
+ *
  * @author tomo
  */
 public class PathTreeItem extends TreeItem<PathItem> {
@@ -61,7 +61,7 @@ public class PathTreeItem extends TreeItem<PathItem> {
                     children.add(createNode(pathItem));
                 }
             } catch (IOException ex) {
-                Logger.getLogger(FileTreeViewSample.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(StartUI.class.getName()).log(Level.SEVERE, null, ex);
             }
             return children;
         }

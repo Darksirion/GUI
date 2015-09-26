@@ -12,7 +12,7 @@ public class Dialog {
 
     static boolean answer;
 
-    public static void information(String title, String message){
+    public static void information(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(title);
         alert.setContentText(message);
@@ -20,7 +20,7 @@ public class Dialog {
         alert.showAndWait();
     }
 
-    public static boolean confirm(String title, String message){
+    public static boolean confirm(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
         alert.setContentText(message);
@@ -28,15 +28,15 @@ public class Dialog {
         Optional<ButtonType> result = alert.showAndWait();
 
         if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-        alert.close();
+            alert.close();
             answer = true;
 
         }
-    return answer;
+        return answer;
 
     }
 
-    public static void exception(String title, String message){
+    public static void exception(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(message);

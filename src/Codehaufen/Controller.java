@@ -123,7 +123,8 @@ class Controller2 {
          }
 */
 }
-class Controller3{
+
+class Controller3 {
         /*
 
          public void loadTreeItems(String... rootItems) {
@@ -137,10 +138,10 @@ class Controller3{
         treeView.setRoot(root);
 
          */
-        }
+}
 
 
-class Controller4{
+class Controller4 {
     /*
 
 

@@ -22,11 +22,10 @@ public class Programmer {
         this.lang = new SimpleStringProperty(lang);
         this.code = new SimpleStringProperty(code);
         this.note = new SimpleStringProperty(note);
-        this.source =new SimpleStringProperty(source);
-        this.creator =new SimpleStringProperty(creator);
+        this.source = new SimpleStringProperty(source);
+        this.creator = new SimpleStringProperty(creator);
         this.createDate = new SimpleStringProperty(createDate);
     }
-
 
 
     public String getName() {
@@ -49,55 +48,55 @@ public class Programmer {
         return lang.get();
     }
 
-    public SimpleStringProperty langProperty() {
-        return lang;
-    }
-
     public void setLang(String lang) {
         this.lang.set(lang);
+    }
+
+    public SimpleStringProperty langProperty() {
+        return lang;
     }
 
     public String getCode() {
         return code.get();
     }
 
-    public SimpleStringProperty codeProperty() {
-        return code;
-    }
-
     public void setCode(String code) {
         this.code.set(code);
+    }
+
+    public SimpleStringProperty codeProperty() {
+        return code;
     }
 
     public String getNote() {
         return note.get();
     }
 
-    public SimpleStringProperty noteProperty() {
-        return note;
-    }
-
     public void setNote(String note) {
         this.note.set(note);
+    }
+
+    public SimpleStringProperty noteProperty() {
+        return note;
     }
 
     public String getSource() {
         return source.get();
     }
 
-    public SimpleStringProperty sourceProperty() {
-        return source;
-    }
-
     public void setSource(String source) {
         this.source.set(source);
+    }
+
+    public SimpleStringProperty sourceProperty() {
+        return source;
     }
 
     public String getCreator() {
         return creator.get();
     }
 
-    public void setCreator(String creator){
+    public void setCreator(String creator) {
         this.creator.set(creator);
     }
 
@@ -105,12 +104,12 @@ public class Programmer {
         return createDate.get();
     }
 
-    public SimpleStringProperty createDateProperty() {
-        return createDate;
-    }
-
     public void setCreateDate(String createDate) {
         this.createDate.set(createDate);
+    }
+
+    public SimpleStringProperty createDateProperty() {
+        return createDate;
     }
 }
 

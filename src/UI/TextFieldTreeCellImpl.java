@@ -3,14 +3,9 @@ package UI;
 import Controll.Dialog;
 import Core.Proxy;
 import Test.PathItem;
-import UI.Controller;
 import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,14 +26,14 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
     private ContextMenu FileMenu = new ContextMenu();
     private ContextMenu DirMenu = new ContextMenu();
 
-    public TextFieldTreeCellImpl(final StringProperty messageProp,Proxy proxy) {
+    public TextFieldTreeCellImpl(final StringProperty messageProp, Proxy proxy) {
         this.messageProp = messageProp;
         MenuItem editFileItem = new MenuItem("Edit File");
         MenuItem deleteFileItem = new MenuItem("Delete File");
         MenuItem addDirItem = new MenuItem("Add Directory");
         MenuItem deleteDirItem = new MenuItem("Delete Directory");
-        FileMenu.getItems().addAll(editFileItem,deleteFileItem);
-        DirMenu.getItems().addAll(addDirItem,deleteDirItem);
+        FileMenu.getItems().addAll(editFileItem, deleteFileItem);
+        DirMenu.getItems().addAll(addDirItem, deleteDirItem);
         /*addFileItem.setOnAction(new EventHandler() {
             public void handle(Event t) {
                 /*String newSnippetName = "Test";
@@ -93,7 +88,7 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
         });
         deleteFileItem.setOnAction(event -> {
             String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();
-            String deleteObject =getTreeItem().getValue().toString();
+            String deleteObject = getTreeItem().getValue().toString();
             System.out.println(showCodeIndex);
             boolean answer = Dialog.confirm("Löschung", "Wollen Sie " + deleteObject + " wirklich löschen?");
             if (answer) {
@@ -112,12 +107,12 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
         deleteDirItem.setOnAction(event -> {
             String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();
             String deleteObject = String.valueOf(getTreeItem().getValue());
-            boolean answer = Dialog.confirm("Löschung","Wollen Sie den Ordner "+ deleteObject + " wirklich löschen?");
+            boolean answer = Dialog.confirm("Löschung", "Wollen Sie den Ordner " + deleteObject + " wirklich löschen?");
             if (answer) {
                 TreeItem<PathItem> selectedNode = getTreeItem();
-                if (selectedNode !=null){
+                if (selectedNode != null) {
                     TreeItem<PathItem> parentNode = selectedNode.getParent();
-                    if (parentNode == null){
+                    if (parentNode == null) {
                         parentNode.getChildren().remove(selectedNode);
                     }
                 }
@@ -125,19 +120,19 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
             proxy.deleteDirectory(showCodeIndex);
         });
         //editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-          //  @Override
-            //public void handle(ActionEvent event) {
-              // String oldObject = getTreeItem().getValue();
-                //textField2 = new TextField(getString());
+        //  @Override
+        //public void handle(ActionEvent event) {
+        // String oldObject = getTreeItem().getValue();
+        //textField2 = new TextField(getString());
 //
-  //          }
-    //    });
+        //          }
+        //    });
     }
 
     @Override
     public void startEdit() {
         super.startEdit();
-        if (textField == null){
+        if (textField == null) {
             createTextField();
         }
         setText(null);
@@ -146,7 +141,7 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
         if (getItem() == null) {
             editingPath = null;
         } else {
-            editingPath =getItem().getPath();
+            editingPath = getItem().getPath();
         }
     }
 
@@ -193,10 +188,9 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
                 if (!getTreeItem().isLeaf()/*&&getTreeItem().getParent()!= null
-                        */){
+                        */) {
                     setContextMenu(DirMenu);
-                }
-                else{
+                } else {
                     setContextMenu(FileMenu);
                 }
             }

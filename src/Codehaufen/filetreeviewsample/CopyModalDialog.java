@@ -12,10 +12,10 @@ import javafx.stage.StageStyle;
 
 /**
  * Dialog for confirm copying file
- * 
+ *
  * @author tomo
  */
-public class CopyModalDialog {    
+public class CopyModalDialog {
     public CopyModalDialog(Stage owner, final BooleanProperty replaceProp) {
         final Stage dialog = new Stage(StageStyle.UTILITY);
         dialog.initOwner(owner);

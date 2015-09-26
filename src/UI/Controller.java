@@ -34,139 +34,106 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 
-
 public class Controller implements Initializable {
 
-    private Stage primaryStage;
     private static final String Versionsnummer = "0.1b";
+    @FXML
+    TextField textFieldSearch;
+    @FXML
+    TextField textFieldNewSnippet;
+    @FXML
+    TextArea textAreaCode;
+    @FXML
+    TextArea textAreaNote;
+    @FXML
+    TextArea textAreaSource;
+    @FXML
+    TextArea textAreaCreator;
+    @FXML
+    TextField textFieldCreateDate;
+    //private FileNode fileNode;
+    @FXML
+    TextArea textAreaLegend;
+    @FXML
+    ComboBox<String> comboBoxLang;
+    @FXML
+    Button btnSetting;
+    @FXML
+    Button btnSearch;
+    @FXML
+    Button btnNew;
+    @FXML
+    Button btnSave;
+    @FXML
+    Button btnCancel;
+    @FXML
+    Label labelNote;
+    @FXML
+    Label labelEdit;
+    @FXML
+    MenuItem menuItemNew;
+    @FXML
+    MenuItem menuItemClose;
+    @FXML
+    MenuItem menuItemCopy;
+    @FXML
+    MenuItem menuItemPaste;
+    @FXML
+    MenuItem menuItemDelete;
+    @FXML
+    MenuItem menuItemHelp;
+    @FXML
+    MenuItem menuItemAbout;
+    List<Snippet> snippetr = Arrays.<Snippet>asList(
+
+            new Snippet("Test", "10.10.2015", "blablabla", "C", "Test123", "von Seite ABC", "von ABC", "C/1")
+
+    );
+    List<Programmer> programmers = Arrays.<Programmer>asList(
+            new Programmer("Philipp", "Managment", "C", "", "", "", "", ""),
+            new Programmer("Edward", "Test1", "JavaFX", "Test123", "von Seite ABC", "www.google.de", "Edward", "23.09.2015"),
+            new Programmer("Alexander", "Test2", "VB", "", "", "", "", ""),
+            new Programmer("Matthias", "Test3", "C#", "", "", "", "", ""),
+            new Programmer("Dominik", "Test4", "JavaFX", "", "", "", "Dominik", "22.09.2015"),
+            new Programmer("Sven", "Test5", "C", "", "", "", "", ""),
+            new Programmer("Olbertz", "Admin", "VB", "", "", "", "", "")
+    );
+    private Stage primaryStage;
     private Proxy proxy;
     private String selection;
     private Path rootPath;
     private Path selectedPath;
     private SettingController settingController;
     private StringProperty messageProp;
-    //private FileNode fileNode;
-
-
     // the FXML annotation tells the loader to inject this variable before invoking initialize.
     @FXML
     private TreeView<PathItem> treeView;
-
-    @FXML
-    TextField textFieldSearch;
-
-    @FXML
-    TextField textFieldNewSnippet;
-
-    @FXML
-    TextArea textAreaCode;
-
-    @FXML
-    TextArea textAreaNote;
-
-    @FXML
-    TextArea textAreaSource;
-
-    @FXML
-    TextArea textAreaCreator;
-
-    @FXML
-    TextField textFieldCreateDate;
-
-    @FXML
-    TextArea textAreaLegend;
-
-    @FXML
-    ComboBox<String> comboBoxLang;
-
-    @FXML
-    Button btnSetting;
-
-    @FXML
-    Button btnSearch;
-
-    @FXML
-    Button btnNew;
-
-    @FXML
-    Button btnSave;
-
-    @FXML
-    Button btnCancel;
-
-    @FXML
-    Label labelNote;
-
-    @FXML
-    Label labelEdit;
-
-    @FXML
-    MenuItem menuItemNew;
-
-    @FXML
-    MenuItem menuItemClose;
-
-    @FXML
-    MenuItem menuItemCopy;
-
-    @FXML
-    MenuItem menuItemPaste;
-
-    @FXML
-    MenuItem menuItemDelete;
-
-    @FXML
-    MenuItem menuItemHelp;
-
-    @FXML
-    MenuItem menuItemAbout;
-
-
-
-
-List<Snippet> snippetr= Arrays.<Snippet>asList(
-
-         new Snippet("Test","10.10.2015","blablabla","C","Test123","von Seite ABC","von ABC","C/1")
-
-    );
     private String root;
 
     //  ("Philipp","Managment")
-    private void loadSnippets(){
+    private void loadSnippets() {
         FileNode root = proxy.loadTree("pfad");
     }
-    List<Programmer> programmers = Arrays.<Programmer>asList(
-            new Programmer("Philipp","Managment","C","","","","",""),
-            new Programmer("Edward", "Test1", "JavaFX","Test123","von Seite ABC","www.google.de","Edward","23.09.2015"),
-            new Programmer("Alexander", "Test2", "VB","","","","",""),
-            new Programmer("Matthias", "Test3", "C#","","","","",""),
-            new Programmer("Dominik", "Test4", "JavaFX","","","","Dominik","22.09.2015"),
-            new Programmer("Sven", "Test5", "C","","","","",""),
-            new Programmer("Olbertz","Admin","VB","","","","","")
-    );
-
 
     @FXML
     public void handleButtonSettingAction(ActionEvent e) throws IOException {
 
-        int []setting2 = new int []{0, 1, 0,1};
+        int[] setting2 = new int[]{0, 1, 0, 1};
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("setting.fxml"));
         fxmlLoader.load();
         Parent root = fxmlLoader.getRoot();
 
-        Stage setting_modal_dialog=new Stage(StageStyle.DECORATED);
+        Stage setting_modal_dialog = new Stage(StageStyle.DECORATED);
         setting_modal_dialog.initModality(Modality.WINDOW_MODAL);
         setting_modal_dialog.initOwner(primaryStage);
-        Scene scene= new Scene(root);
+        Scene scene = new Scene(root);
 
-        SettingController settingController = (SettingController)fxmlLoader.getController();
+        SettingController settingController = (SettingController) fxmlLoader.getController();
         settingController.setStage(setting_modal_dialog);
         settingController.setSetting(setting2);
         setting_modal_dialog.setScene(scene);
         setting_modal_dialog.show();
-
-
 
 
     }
@@ -206,14 +173,14 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
             copyText = textAreaCode.getText();
         }
 
-        if(Objects.equals(selection, "textAreaNote")) {
+        if (Objects.equals(selection, "textAreaNote")) {
             copyText = textAreaNote.getText();
         }
 
-        if(Objects.equals(selection, "textAreaSource"))
+        if (Objects.equals(selection, "textAreaSource"))
             copyText = textAreaSource.getText();
 
-        if(selection == "textAreaCreator")
+        if (selection == "textAreaCreator")
             copyText = textAreaCreator.getText();
 
         System.out.println(copyText);
@@ -225,8 +192,8 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
         System.out.println(content);
     }
 
-    public void testButtonClicked(){
-       proxy.addDirectory("Test123");
+    public void testButtonClicked() {
+        proxy.addDirectory("Test123");
         // FileNodeLoadTreeItems(/*fileNode*/);
     }
 
@@ -237,22 +204,22 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
         //System.out.println(textAreaCode.getId());
         //System.out.println(selection);
 
-         if (Objects.equals(selection, "textAreaCode")) {
-             textAreaCode.replaceSelection(clipboard.getString());
-         }
+        if (Objects.equals(selection, "textAreaCode")) {
+            textAreaCode.replaceSelection(clipboard.getString());
+        }
 
-        if(Objects.equals(selection, "textAreaNote"))
+        if (Objects.equals(selection, "textAreaNote"))
             textAreaNote.replaceSelection(clipboard.getString());
 
-        if(Objects.equals(selection, "textAreaSource"))
+        if (Objects.equals(selection, "textAreaSource"))
             textAreaSource.replaceSelection(clipboard.getString());
 
-        if(Objects.equals(selection, "textAreaCreator"))
+        if (Objects.equals(selection, "textAreaCreator"))
             textAreaCreator.replaceSelection(clipboard.getString());
 
-       // textAreaCode.replaceSelection(clipboard.getString());
+        // textAreaCode.replaceSelection(clipboard.getString());
         // Unterscheidung zwischen AreaCode und textField Quelle
-      //  System.out.println(clipboard);
+        //  System.out.println(clipboard);
 
     }
 
@@ -264,10 +231,10 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
     public void newButtonClicked() {
         newSnippet();
         textFieldNewSnippet.clear();
-       // textAreaCode.clear();
-     //   textAreaCode.setEditable(true);
-    //    textAreaNote.setEditable(true);
-    //    textAreaSource.setEditable(true);
+        // textAreaCode.clear();
+        //   textAreaCode.setEditable(true);
+        //    textAreaNote.setEditable(true);
+        //    textAreaSource.setEditable(true);
     }
 
     public void saveButtonSnippetClicked() {
@@ -282,20 +249,20 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
 
         //TreeItem<String> selectedItem = (TreeItem)treeView.getSelectionModel().getSelectedItem();
         //if (selectedItem != null) {
-            //   String pathString = selectedItem.getFullPath();
+        //   String pathString = selectedItem.getFullPath();
         //}
-       // String selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
-       // ObjectProperty<PathItem> selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
+        // String selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
+        // ObjectProperty<PathItem> selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
         //String test = rootPath.toAbsolutePath().toString();
         String Path = treeView.getSelectionModel().getSelectedItem().getValue().getPath().toString();
-       // System.out.println(test);
-       // System.out.println(Path);
+        // System.out.println(test);
+        // System.out.println(Path);
         String selectedParentPath = /*test +"/"+comboBoxLang.getValue()+*/Path/*+name*/;
         System.out.println(selectedParentPath);
-        String lang= comboBoxLang.getValue();
+        String lang = comboBoxLang.getValue();
 
         proxy.addSnippet(name, code, note, source, creator, selectedParentPath);
-        String parent= "test";
+        String parent = "test";
         System.out.println(selectedParentPath);
         System.out.println(name);
         System.out.println(lang);
@@ -309,7 +276,6 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
 
 
     }
-
 
 
     public void cancelButtonSnippetClicked() {
@@ -332,12 +298,12 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
     public void FileNodeLoadTreeItems() {
 
         FileNode fileNode = proxy.loadTree(root);
-        String test2= fileNode.getPrimaryKey();
+        String test2 = fileNode.getPrimaryKey();
         System.out.println(test2);
 
-        String test ="./New Directory";
+        String test = "./New Directory";
         //messageProp.setValue(null);
-        rootPath =Paths.get(test2);
+        rootPath = Paths.get(test2);
         PathItem pathItem = new PathItem(rootPath);
         treeView.setEditable(true);
         treeView.setShowRoot(false);
@@ -359,7 +325,6 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
         treeView.setShowRoot(false);
 
 
-
         for (Programmer programmer : programmers) {
             TreeItem<String> progLeaf = new TreeItem<>(programmer.getName());
             boolean found = false;
@@ -372,7 +337,7 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
                 }
             }
             if (!found) {
-                if(programmer.getLang().contentEquals(comboBoxLang.getValue())) {
+                if (programmer.getLang().contentEquals(comboBoxLang.getValue())) {
                     TreeItem groupNode = new TreeItem(programmer.getGroup());
                     root.getChildren().add(groupNode);
                     groupNode.getChildren().add(progLeaf);
@@ -380,12 +345,12 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
             }
         }
 
-      //  treeView.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
+        //  treeView.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
         //    @Override
-       //     public TreeCell<String> call(TreeView<String> p) {
-       //         return new TextFieldTreeCellImpl(proxy);
-       //     }
-      //  });
+        //     public TreeCell<String> call(TreeView<String> p) {
+        //         return new TextFieldTreeCellImpl(proxy);
+        //     }
+        //  });
 
         //treeView.setRoot(root);
     }
@@ -441,16 +406,16 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
     }
     */
 
-    public String showCodeIndex(){
-        String select = comboBoxLang.getValue()+"/"+treeView.getSelectionModel().getSelectedIndex();
+    public String showCodeIndex() {
+        String select = comboBoxLang.getValue() + "/" + treeView.getSelectionModel().getSelectedIndex();
         return select;
     }
 
- //   public void setMain(StartUI main) {
-  //      this.main = main;
+    //   public void setMain(StartUI main) {
+    //      this.main = main;
 
-        // Add observable list data to the table
-       // personTable.setItems(mainApp.getPersonData());
+    // Add observable list data to the table
+    // personTable.setItems(mainApp.getPersonData());
     //}
 
 
@@ -459,55 +424,55 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
         return lang;
     }
 
-    public int[] getSetting(){
-        int [] setting = settingController.getSetting();
+    public int[] getSetting() {
+        int[] setting = settingController.getSetting();
         return setting;
     }
 
-    public String getSelectedObject(){
+    public String getSelectedObject() {
         String selectedObject = treeView.getSelectionModel().getSelectedItem().getValue().getPath().toString();
         return selectedObject;
     }
 
 
-    public String getNewSnippetName(){
-        String newSnippetName= textFieldNewSnippet.getText();
-            return newSnippetName;
+    public String getNewSnippetName() {
+        String newSnippetName = textFieldNewSnippet.getText();
+        return newSnippetName;
     }
 
 
-    public void SelectionAreaCode(){
+    public void SelectionAreaCode() {
         getSelectionAreaCode();
     }
 
-    public void SelcetionAreaSource(){
+    public void SelcetionAreaSource() {
         getSelectionAreaSource();
     }
 
-    public void SelectionAreaCreator(){
+    public void SelectionAreaCreator() {
         getSelectionCreator();
     }
 
-    public void SelectionAreaNote(){
+    public void SelectionAreaNote() {
         getSelectionNote();
     }
 
-    public String getSelectionAreaCode(){
+    public String getSelectionAreaCode() {
         selection = textAreaCode.getId();
         return selection;
     }
 
-    public String getSelectionAreaSource(){
+    public String getSelectionAreaSource() {
         selection = textAreaSource.getId();
         return selection;
     }
 
-    public String getSelectionCreator(){
+    public String getSelectionCreator() {
         selection = textAreaCreator.getId();
         return selection;
     }
 
-    public String getSelectionNote(){
+    public String getSelectionNote() {
         selection = textAreaNote.getId();
         return selection;
     }
@@ -570,22 +535,26 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
             if (newLang != null) {
                 System.out.println(newLang);
                 switch (newLang) {
-                    case "JavaFX": String lang = newLang;
+                    case "JavaFX":
+                        String lang = newLang;
                         System.out.println(newLang);
                         FileNodeLoadTreeItems();
                         //loadTreeItems();
                         break;
-                          case "C": lang = newLang;
+                    case "C":
+                        lang = newLang;
                         System.out.println(newLang);
 
-                              loadTreeItems();
+                        loadTreeItems();
                         break;
-                    case "C#": lang = newLang;
+                    case "C#":
+                        lang = newLang;
                         System.out.println(newLang);
                         lang = newLang;
                         //loadTreeItems();
                         break;
-                    case "VB": lang = newLang;
+                    case "VB":
+                        lang = newLang;
                         //loadTreeItems();
                 }
             }

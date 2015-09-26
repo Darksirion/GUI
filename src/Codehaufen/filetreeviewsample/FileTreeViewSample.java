@@ -1,15 +1,6 @@
 package Codehaufen.filetreeviewsample;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-
 import javafx.application.Application;
-import static javafx.application.Application.launch;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -18,15 +9,7 @@ import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -37,6 +20,13 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+
 public class FileTreeViewSample extends Application {
 
     private ExecutorService service;
@@ -46,7 +36,7 @@ public class FileTreeViewSample extends Application {
     private Path rootPath;
     private Button dispBtn;
     private Text messageText;
-    private StringProperty messageProp= new SimpleStringProperty();
+    private StringProperty messageProp = new SimpleStringProperty();
     private TreeView<PathItem> fileTreeView;
     private CheckBox watchChkbox;
     private TextArea watchText;
@@ -61,7 +51,11 @@ public class FileTreeViewSample extends Application {
     public FileTreeViewSample() {
         fileTreeView = new TreeView<>();
         /*fileTreeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);*/
-       // service = Executors.newFixedThreadPool(3);
+        // service = Executors.newFixedThreadPool(3);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
     @Override
@@ -71,7 +65,7 @@ public class FileTreeViewSample extends Application {
         root.setSpacing(10);
         // root Directory
         HBox rootHbox = getRootHbox(stage);
-        messageText = new Text();        
+        messageText = new Text();
         messageText.yProperty().set(30);
         messageText.setFill(Color.RED);
         messageText.textProperty().bind(messageProp);
@@ -94,7 +88,7 @@ public class FileTreeViewSample extends Application {
         stage.setTitle("File Tree View Sample");
         stage.setScene(scene);
         stage.show();
-      //  Platform.runLater(() -> rootDirText.requestFocus());
+        //  Platform.runLater(() -> rootDirText.requestFocus());
     }
 
     private HBox getRootHbox(final Stage stage) {
@@ -144,7 +138,7 @@ public class FileTreeViewSample extends Application {
         // Display File Tree Button
         dispBtn.setOnAction(event -> {
 
-           // messageProp.setValue(null);
+            // messageProp.setValue(null);
             watchChkbox.setDisable(false);
             watchChkbox.setSelected(false);
             watchText.clear();
@@ -165,7 +159,7 @@ public class FileTreeViewSample extends Application {
             fileTreeView.setEditable(true);
             fileTreeView.setCellFactory((TreeView<PathItem> p) -> {
                 final PathTreeCell cell = new PathTreeCell(/*stage, */messageProp);
-               //setDragDropEvent(stage, cell);
+                //setDragDropEvent(stage, cell);
                 return cell;
             });
         });
@@ -203,101 +197,97 @@ public class FileTreeViewSample extends Application {
         });*/
     }
 
-  /*  private void setDragDropEvent(Stage stage, final PathTreeCell cell) {
-        // The drag starts on a gesture source
-        cell.setOnDragDetected(event -> {
-            TreeItem<PathItem> item = cell.getTreeItem();
-            if (item != null && item.isLeaf()) {
-                Dragboard db = cell.startDragAndDrop(TransferMode.COPY);
-                ClipboardContent content = new ClipboardContent();
-                List<File> files = Arrays.asList(cell.getTreeItem().getValue().getPath().toFile());
-                content.putFiles(files);
-                db.setContent(content);
-                event.consume();
-            }
-        });
-        // on a Target
-        cell.setOnDragOver(event -> {
-            TreeItem<PathItem> item = cell.getTreeItem();
-            if ((item != null && !item.isLeaf()) &&
-                    event.getGestureSource() != cell &&
-                    event.getDragboard().hasFiles()) {
-                Path targetPath = cell.getTreeItem().getValue().getPath();
-                PathTreeCell sourceCell = (PathTreeCell) event.getGestureSource();
-                final Path sourceParentPath = sourceCell.getTreeItem().getValue().getPath().getParent();
-                if (sourceParentPath.compareTo(targetPath) != 0) {
-                    event.acceptTransferModes(TransferMode.COPY);
-                }
-            }
-            event.consume();
-        });
-        // on a Target
-        cell.setOnDragEntered(event -> {
-            TreeItem<PathItem> item = cell.getTreeItem();
-            if ((item != null && !item.isLeaf()) &&
-                    event.getGestureSource() != cell &&
-                    event.getDragboard().hasFiles()) {
-                Path targetPath = cell.getTreeItem().getValue().getPath();
-                PathTreeCell sourceCell = (PathTreeCell) event.getGestureSource();
-                final Path sourceParentPath = sourceCell.getTreeItem().getValue().getPath().getParent();
-                if (sourceParentPath.compareTo(targetPath) != 0) {
-                    cell.setStyle("-fx-background-color: powderblue;");
-                }                
-            }
-            event.consume();
-        });
-        // on a Target
-        cell.setOnDragExited(event -> {
-            cell.setStyle("-fx-background-color: white");
-            event.consume();
-        });
-        // on a Target
-        cell.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasFiles()) {
-                final Path source = db.getFiles().get(0).toPath();
-                final Path target = Paths.get(
-                        cell.getTreeItem().getValue().getPath().toAbsolutePath().toString(),
-                        source.getFileName().toString());
-                if (Files.exists(target, LinkOption.NOFOLLOW_LINKS)) {
-                    Platform.runLater(() -> {
-                        BooleanProperty replaceProp = new SimpleBooleanProperty();
-                        CopyModalDialog dialog = new CopyModalDialog(stage, replaceProp);
-                        replaceProp.addListener((ObservableValue<? extends Boolean> ov, Boolean oldValue, Boolean newValue) -> {
-                            if (newValue) {
-                                FileCopyTask task = new FileCopyTask(source, target);
-                                service.submit(task);
-                            }
-                        });
-                    });
-                } else {
-                    FileCopyTask task = new FileCopyTask(source, target);
-                    service.submit(task);
-                    task.setOnSucceeded(value -> {
-                        Platform.runLater(() -> {
-                            TreeItem<PathItem> item = PathTreeItem.createNode(new PathItem(target));
-                            cell.getTreeItem().getChildren().add(item);
-                        });
-                    });
-                }
-                success = true;
-            }
-            event.setDropCompleted(success);
-            event.consume();
-        });
-        // on a Source
-        cell.setOnDragDone(event -> {
-            ;
-        });
-    }
-*/
+    /*  private void setDragDropEvent(Stage stage, final PathTreeCell cell) {
+          // The drag starts on a gesture source
+          cell.setOnDragDetected(event -> {
+              TreeItem<PathItem> item = cell.getTreeItem();
+              if (item != null && item.isLeaf()) {
+                  Dragboard db = cell.startDragAndDrop(TransferMode.COPY);
+                  ClipboardContent content = new ClipboardContent();
+                  List<File> files = Arrays.asList(cell.getTreeItem().getValue().getPath().toFile());
+                  content.putFiles(files);
+                  db.setContent(content);
+                  event.consume();
+              }
+          });
+          // on a Target
+          cell.setOnDragOver(event -> {
+              TreeItem<PathItem> item = cell.getTreeItem();
+              if ((item != null && !item.isLeaf()) &&
+                      event.getGestureSource() != cell &&
+                      event.getDragboard().hasFiles()) {
+                  Path targetPath = cell.getTreeItem().getValue().getPath();
+                  PathTreeCell sourceCell = (PathTreeCell) event.getGestureSource();
+                  final Path sourceParentPath = sourceCell.getTreeItem().getValue().getPath().getParent();
+                  if (sourceParentPath.compareTo(targetPath) != 0) {
+                      event.acceptTransferModes(TransferMode.COPY);
+                  }
+              }
+              event.consume();
+          });
+          // on a Target
+          cell.setOnDragEntered(event -> {
+              TreeItem<PathItem> item = cell.getTreeItem();
+              if ((item != null && !item.isLeaf()) &&
+                      event.getGestureSource() != cell &&
+                      event.getDragboard().hasFiles()) {
+                  Path targetPath = cell.getTreeItem().getValue().getPath();
+                  PathTreeCell sourceCell = (PathTreeCell) event.getGestureSource();
+                  final Path sourceParentPath = sourceCell.getTreeItem().getValue().getPath().getParent();
+                  if (sourceParentPath.compareTo(targetPath) != 0) {
+                      cell.setStyle("-fx-background-color: powderblue;");
+                  }
+              }
+              event.consume();
+          });
+          // on a Target
+          cell.setOnDragExited(event -> {
+              cell.setStyle("-fx-background-color: white");
+              event.consume();
+          });
+          // on a Target
+          cell.setOnDragDropped(event -> {
+              Dragboard db = event.getDragboard();
+              boolean success = false;
+              if (db.hasFiles()) {
+                  final Path source = db.getFiles().get(0).toPath();
+                  final Path target = Paths.get(
+                          cell.getTreeItem().getValue().getPath().toAbsolutePath().toString(),
+                          source.getFileName().toString());
+                  if (Files.exists(target, LinkOption.NOFOLLOW_LINKS)) {
+                      Platform.runLater(() -> {
+                          BooleanProperty replaceProp = new SimpleBooleanProperty();
+                          CopyModalDialog dialog = new CopyModalDialog(stage, replaceProp);
+                          replaceProp.addListener((ObservableValue<? extends Boolean> ov, Boolean oldValue, Boolean newValue) -> {
+                              if (newValue) {
+                                  FileCopyTask task = new FileCopyTask(source, target);
+                                  service.submit(task);
+                              }
+                          });
+                      });
+                  } else {
+                      FileCopyTask task = new FileCopyTask(source, target);
+                      service.submit(task);
+                      task.setOnSucceeded(value -> {
+                          Platform.runLater(() -> {
+                              TreeItem<PathItem> item = PathTreeItem.createNode(new PathItem(target));
+                              cell.getTreeItem().getChildren().add(item);
+                          });
+                      });
+                  }
+                  success = true;
+              }
+              event.setDropCompleted(success);
+              event.consume();
+          });
+          // on a Source
+          cell.setOnDragDone(event -> {
+              ;
+          });
+      }
+  */
     private TreeItem<PathItem> createNode(PathItem pathItem) {
         return PathTreeItem.createNode(pathItem);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     @Override

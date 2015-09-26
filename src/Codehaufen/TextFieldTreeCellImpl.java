@@ -19,7 +19,7 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
 
     private TextField textField;
     private TextField textField2 = textField;
-  //  private Proxy proxy;
+    //  private Proxy proxy;
     private StringProperty messageProp;
     private Controller controller;
     private ContextMenu FileMenu = new ContextMenu();
@@ -31,7 +31,7 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
         MenuItem addDirItem = new MenuItem("Add Directory");
         MenuItem deleteDirItem = new MenuItem("Delete Directory");
         FileMenu.getItems().addAll(deleteFileItem);
-        DirMenu.getItems().addAll(addDirItem,deleteDirItem);
+        DirMenu.getItems().addAll(addDirItem, deleteDirItem);
     /*    addFileItem.setOnAction(new EventHandler() {
             public void handle(Event t) {
                 String newSnippetName = "Test";
@@ -45,8 +45,8 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
             }
         });
 */
-        addDirItem.setOnAction(new EventHandler(){
-            public void handle (Event t){
+        addDirItem.setOnAction(new EventHandler() {
+            public void handle(Event t) {
                 TreeItem newProgrammer =
                         new TreeItem<String>("New Directory");
                 getTreeItem().getParent().getChildren().add(newProgrammer);
@@ -75,16 +75,16 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
                 proxy.deleteDirectory(deleteObject);
             }
         });
-        deleteDirItem.setOnAction(new EventHandler<ActionEvent>(){
+        deleteDirItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 String deleteObject = getTreeItem().getValue();
-                boolean answer = Dialog.confirm("Löschung","Wollen Sie den Ordner "+ deleteObject + " wirklich löschen?");
+                boolean answer = Dialog.confirm("Löschung", "Wollen Sie den Ordner " + deleteObject + " wirklich löschen?");
                 if (answer) {
                     TreeItem<String> selectedNode = getTreeItem();
-                    if (selectedNode !=null){
+                    if (selectedNode != null) {
                         TreeItem<String> parentNode = selectedNode.getParent();
-                        if (parentNode == null){
+                        if (parentNode == null) {
                             parentNode.getChildren().remove(selectedNode);
                         }
                     }
@@ -92,13 +92,13 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
             }
         });
         //editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-          //  @Override
-            //public void handle(ActionEvent event) {
-              // String oldObject = getTreeItem().getValue();
-                //textField2 = new TextField(getString());
+        //  @Override
+        //public void handle(ActionEvent event) {
+        // String oldObject = getTreeItem().getValue();
+        //textField2 = new TextField(getString());
 //
-  //          }
-    //    });
+        //          }
+        //    });
     }
 
     @Override
@@ -141,10 +141,9 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
                 if (/*!*/getTreeItem().isLeaf()/*&&getTreeItem().getParent()!= null
-                        */){
+                        */) {
                     setContextMenu(FileMenu);
-                }
-                else{
+                } else {
                     setContextMenu(DirMenu);
                 }
             }

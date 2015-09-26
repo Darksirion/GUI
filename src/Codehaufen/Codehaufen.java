@@ -1,7 +1,6 @@
 package Codehaufen;
 
 
-
 /**
  * Created by Darksirion on 03.09.15.
  */
@@ -56,7 +55,6 @@ public class Codehaufen {
     */
 
 
-
     //StartUI
 
 
@@ -99,11 +97,6 @@ public class Codehaufen {
         }
     }
 */
-
-
-
-
-
 
 
 }

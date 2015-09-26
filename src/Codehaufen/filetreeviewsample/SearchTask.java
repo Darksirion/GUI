@@ -1,16 +1,12 @@
 package Codehaufen.filetreeviewsample;
 
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
+
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * this is to search file by using concurrent Task
@@ -21,7 +17,7 @@ public class SearchTask extends Task<Void> {
     private Path path;
     private String pattern;
     private StringProperty resultString;
-    
+
     public SearchTask(Path path, String pattern) {
         this.path = path;
         this.pattern = pattern;
@@ -35,6 +31,7 @@ public class SearchTask extends Task<Void> {
         final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             int cnt = 0;
+
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 if (matcher.matches(file.getFileName())) {
