@@ -3,6 +3,7 @@ package UI;
 import Controll.Dialog;
 import Core.Proxy;
 import Test.PathItem;
+import UI.Controller;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -32,11 +33,11 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
 
     public TextFieldTreeCellImpl(final StringProperty messageProp,Proxy proxy) {
         this.messageProp = messageProp;
-        MenuItem addFileItem = new MenuItem("Add File");
+        MenuItem editFileItem = new MenuItem("Edit File");
         MenuItem deleteFileItem = new MenuItem("Delete File");
         MenuItem addDirItem = new MenuItem("Add Directory");
         MenuItem deleteDirItem = new MenuItem("Delete Directory");
-        FileMenu.getItems().addAll(deleteFileItem);
+        FileMenu.getItems().addAll(editFileItem,deleteFileItem);
         DirMenu.getItems().addAll(addDirItem,deleteDirItem);
         /*addFileItem.setOnAction(new EventHandler() {
             public void handle(Event t) {
@@ -76,6 +77,11 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
 
         });
 */
+        editFileItem.setOnAction(t -> {
+            controller.newSnippet();
+            controller.textFieldNewSnippet.setText(getTreeView().getSelectionModel().getSelectedItem().getValue().toString());
+
+        });
         addDirItem.setOnAction(t -> {
             String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();
             TreeItem newProgrammer =
@@ -99,9 +105,9 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
                         parentNode.getChildren().remove(selectedNode);
                     }
                 }
-
+                proxy.deleteSnippet(showCodeIndex);
             }
-            proxy.deleteSnippet(showCodeIndex);
+
         });
         deleteDirItem.setOnAction(event -> {
             String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();

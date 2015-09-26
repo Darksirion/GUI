@@ -352,7 +352,7 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
     }
 
 
-    public void loadTreeItems(/*String... rootItems*/) {
+    public void loadTreeItems() {
         TreeItem<String> root = new TreeItem<>("Snippet");
         treeView.setEditable(true);
 
@@ -361,7 +361,7 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
 
 
         for (Programmer programmer : programmers) {
-            TreeItem<String> progLeaf = new TreeItem<String>(programmer.getName());
+            TreeItem<String> progLeaf = new TreeItem<>(programmer.getName());
             boolean found = false;
             for (TreeItem<String> groupNode : root.getChildren()) {
                 if (groupNode.getValue().contentEquals(programmer.getGroup())) {
@@ -578,7 +578,7 @@ List<Snippet> snippetr= Arrays.<Snippet>asList(
                           case "C": lang = newLang;
                         System.out.println(newLang);
 
-                         //     loadTreeItems();
+                              loadTreeItems();
                         break;
                     case "C#": lang = newLang;
                         System.out.println(newLang);
