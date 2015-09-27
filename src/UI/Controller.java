@@ -262,6 +262,8 @@ public class Controller implements Initializable {
         String lang = comboBoxLang.getValue();
 
         proxy.addSnippet(name, code, note, source, creator, selectedParentPath);
+
+
         String parent = "test";
         System.out.println(selectedParentPath);
         System.out.println(name);
@@ -273,7 +275,7 @@ public class Controller implements Initializable {
         System.out.println(createDate);
         //TODO
         backHomescreen();
-
+        FileNodeLoadTreeItems();
 
     }
 

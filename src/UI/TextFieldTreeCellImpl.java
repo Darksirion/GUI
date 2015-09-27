@@ -83,8 +83,9 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
                     new TreeItem<>("New Directory");
             getTreeItem().getParent().getChildren().add(newProgrammer);
             //String Directory = String.valueOf(newProgrammer.getValue());
+            String Directory = showCodeIndex + "/" + newProgrammer;
             System.out.println(showCodeIndex);
-            proxy.addDirectory(showCodeIndex);
+            proxy.addDirectory(Directory);
         });
         deleteFileItem.setOnAction(event -> {
             String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();
@@ -116,8 +117,9 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
                         parentNode.getChildren().remove(selectedNode);
                     }
                 }
+                proxy.deleteDirectory(showCodeIndex);
             }
-            proxy.deleteDirectory(showCodeIndex);
+
         });
         //editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
         //  @Override

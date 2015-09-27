@@ -31,7 +31,7 @@ public class Core {
 
 		String sprache = proxy.getSprache();
 		try {
-			String newKey = parentPath + name;
+			String newKey = parentPath +"/"+ name;
 
 			loader.saveSnippet(new Snippet(name, formatString, code, sprache, notizen, quellen, author, newKey));
 		} catch (IOException e) {
