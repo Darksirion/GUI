@@ -110,7 +110,7 @@ public class Controller implements Initializable {
     private TreeView<PathItem> treeView;
     private String root;
 
-    //  ("Philipp","Managment")
+
     private void loadSnippets() {
         FileNode root = proxy.loadTree("pfad");
     }
@@ -196,7 +196,6 @@ public class Controller implements Initializable {
         proxy.addDirectory("Test123");
         // FileNodeLoadTreeItems(/*fileNode*/);
     }
-
     public void pasteMenuClicked() {
         //paste Code einfügen in textAreaCode
         Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -258,24 +257,24 @@ public class Controller implements Initializable {
         // System.out.println(test);
         // System.out.println(Path);
         String selectedParentPath = /*test +"/"+comboBoxLang.getValue()+*/Path/*+name*/;
-        System.out.println(selectedParentPath);
+        //System.out.println(selectedParentPath);
         String lang = comboBoxLang.getValue();
 
         proxy.addSnippet(name, code, note, source, creator, selectedParentPath);
-
+        FileNodeLoadTreeItems();
 
         String parent = "test";
-        System.out.println(selectedParentPath);
-        System.out.println(name);
-        System.out.println(lang);
-        System.out.println(code);
-        System.out.println(note);
-        System.out.println(source);
-        System.out.println(creator);
-        System.out.println(createDate);
+        // System.out.println(selectedParentPath);
+        // System.out.println(name);
+        // System.out.println(lang);
+        // System.out.println(code);
+        // System.out.println(note);
+        // System.out.println(source);
+        // System.out.println(creator);
+        // System.out.println(createDate);
         //TODO
         backHomescreen();
-        FileNodeLoadTreeItems();
+
 
     }
 
@@ -301,7 +300,7 @@ public class Controller implements Initializable {
 
         FileNode fileNode = proxy.loadTree(root);
         String test2 = fileNode.getPrimaryKey();
-        System.out.println(test2);
+        //System.out.println(test2);
 
         String test = "./New Directory";
         //messageProp.setValue(null);
@@ -535,23 +534,23 @@ public class Controller implements Initializable {
             //
 
             if (newLang != null) {
-                System.out.println(newLang);
+                //System.out.println(newLang);
                 switch (newLang) {
                     case "JavaFX":
                         String lang = newLang;
-                        System.out.println(newLang);
+                        //System.out.println(newLang);
                         FileNodeLoadTreeItems();
                         //loadTreeItems();
                         break;
                     case "C":
                         lang = newLang;
-                        System.out.println(newLang);
+                        //System.out.println(newLang);
 
                         loadTreeItems();
                         break;
                     case "C#":
                         lang = newLang;
-                        System.out.println(newLang);
+                        //System.out.println(newLang);
                         lang = newLang;
                         //loadTreeItems();
                         break;
