@@ -1,4 +1,4 @@
-
+package Database;
 
 import de.htw.saarland.stl.Stdin;
 

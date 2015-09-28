@@ -1,4 +1,4 @@
-
+package Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import Core.Snippet;
 
 /*
  * stellt Verbindung zur Datenbank her.
@@ -168,7 +170,21 @@ public class DBController {
 			dirStmt.setString(1, key);
 			dirStmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("Ordner konnte nicht geloescht werden.");
+			System.err.println("Ordner konnte nicht geloescht werden.");
+			e.printStackTrace();
+		}
+	}
+	
+	public void renameDirectory(String key, String newName) {
+		PreparedStatement pStmt;
+		try {
+			pStmt = connection.prepareStatement(
+					"UPDATE directories SET name = ? WHERE key = ?");
+			pStmt.setString(1, newName);
+			pStmt.setString(2, key);
+			pStmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Ordner konnte nicht umbenannt werden.");
 			e.printStackTrace();
 		}
 	}
