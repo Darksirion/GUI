@@ -1,5 +1,6 @@
 package Database;
 
+import Core.Snippet;
 import de.htw.saarland.stl.Stdin;
 
 public class DBDialog {

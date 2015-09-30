@@ -1,15 +1,10 @@
 package Database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import Core.Snippet;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import Core.Snippet;
 
 /*
  * stellt Verbindung zur Datenbank her.
@@ -25,8 +20,8 @@ public class DBController {
 	
 	private static final DBController dbcontroller = new DBController();
 	private static Connection connection;
-	
-	static{
+
+	private static void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
@@ -77,6 +72,7 @@ public class DBController {
 	public void createSnippetTable(String name) {
 		try {
 			Statement stmt = connection.createStatement();
+
 			stmt.executeUpdate(
 					"CREATE TABLE "+name+" (primaryKey varchar(50), name varchar(10), datum varchar(30), code varchar(5000), sprache varchar(20),"
 							+ "notizen varchar(200), quellen varchar(100), author varchar(50), ordner varchar(50));");
@@ -101,7 +97,6 @@ public class DBController {
 	/**
 	 * laed Snippet aus der Datenbank.
 	 * @param key
-	 * @param table
 	 * @return Snippet
 	 */
 	public Snippet loadSnippet(String key) {
@@ -321,8 +316,30 @@ public class DBController {
 			e.printStackTrace();
 		}
 	}
-	
-	public void closeDBConnection() {
+
+
+	public static ResultSet select(String sql) {
+		// Connection mit SQL Datenbank herstellen
+		connect();
+		Statement statement;
+		try {
+			statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			// resultSet.close();
+			return resultSet;
+		} catch (SQLException e) {
+			System.out.println("Select fehlgeschlagen!");
+			e.printStackTrace();
+			return null;
+		} finally {
+			// System.out.println("Select erfolgreich! ");
+			/* try { //connection.close(); } catch (SQLException e) {
+			 * e.printStackTrace(); } */
+		}
+	}
+
+
+	public static void closeDBConnection() {
 		try {
 			connection.close();
 		} catch (SQLException e) {

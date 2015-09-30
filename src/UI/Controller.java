@@ -6,9 +6,12 @@ import Controll.Dialog;
 import Core.FileNode;
 import Core.Proxy;
 import Core.Snippet;
+import Database.Ausgabe;
+import Database.DBController;
 import Test.PathItem;
 import Test.PathTreeItem;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +31,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +57,6 @@ public class Controller implements Initializable {
     TextArea textAreaCreator;
     @FXML
     TextField textFieldCreateDate;
-    //private FileNode fileNode;
     @FXML
     TextArea textAreaLegend;
     @FXML
@@ -84,11 +89,9 @@ public class Controller implements Initializable {
     MenuItem menuItemHelp;
     @FXML
     MenuItem menuItemAbout;
-    List<Snippet> snippetr = Arrays.<Snippet>asList(
 
-            new Snippet("Test", "10.10.2015", "blablabla", "C", "Test123", "von Seite ABC", "von ABC", "C/1")
 
-    );
+
     List<Programmer> programmers = Arrays.<Programmer>asList(
             new Programmer("Philipp", "Managment", "C", "", "", "", "", ""),
             new Programmer("Edward", "Test1", "JavaFX", "Test123", "von Seite ABC", "www.google.de", "Edward", "23.09.2015"),
@@ -105,10 +108,23 @@ public class Controller implements Initializable {
     private Path selectedPath;
     private SettingController settingController;
     private StringProperty messageProp;
+    private Connection connection;
+    private DBController dbc;
+    private Ausgabe ausgabe;
+    private static Statement stat;
+    private PreparedStatement prep;
+    private ObservableList<Snippet> data;
+    private TreeView<String> treeData;
     // the FXML annotation tells the loader to inject this variable before invoking initialize.
     @FXML
     private TreeView<PathItem> treeView;
     private String root;
+
+    public Controller() {
+        dbc = DBController.getInstance();
+        dbc.initDBConnection();
+
+    }
 
 
     private void loadSnippets() {
@@ -193,7 +209,10 @@ public class Controller implements Initializable {
     }
 
     public void testButtonClicked() {
-        proxy.addDirectory("Test123");
+        //  String test = dbc.getDirectoryName("1");
+        //    System.out.println(test);
+
+        //proxy.addDirectory("Test123");
         // FileNodeLoadTreeItems(/*fileNode*/);
     }
     public void pasteMenuClicked() {
@@ -245,6 +264,8 @@ public class Controller implements Initializable {
         String source = textAreaSource.getText();
         String creator = textAreaCreator.getText();
         String createDate = textFieldCreateDate.getText();
+        String primaryKey = null;
+        String datum = "01.01.2015";
 
         //TreeItem<String> selectedItem = (TreeItem)treeView.getSelectionModel().getSelectedItem();
         //if (selectedItem != null) {
@@ -253,15 +274,19 @@ public class Controller implements Initializable {
         // String selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
         // ObjectProperty<PathItem> selectedPath = treeView.getSelectionModel().getSelectedItem().getValue();
         //String test = rootPath.toAbsolutePath().toString();
-        String Path = treeView.getSelectionModel().getSelectedItem().getValue().getPath().toString();
+        //     String Path = treeView.getSelectionModel().getSelectedItem().getValue().getPath().toString();
         // System.out.println(test);
         // System.out.println(Path);
-        String selectedParentPath = /*test +"/"+comboBoxLang.getValue()+*/Path/*+name*/;
+        //     String selectedParentPath = /*test +"/"+comboBoxLang.getValue()+*/Path/*+name*/;
         //System.out.println(selectedParentPath);
         String lang = comboBoxLang.getValue();
+        Snippet snip = new Snippet(name, datum, code, lang, note, source, creator, primaryKey);
+        String dir = "2";
+        dbc.insertSnippet(snip, dir);
 
-        proxy.addSnippet(name, code, note, source, creator, selectedParentPath);
-        FileNodeLoadTreeItems();
+
+        //      proxy.addSnippet(name, code, note, source, creator, selectedParentPath);
+
 
         String parent = "test";
         // System.out.println(selectedParentPath);
@@ -274,6 +299,7 @@ public class Controller implements Initializable {
         // System.out.println(createDate);
         //TODO
         backHomescreen();
+        FileNodeLoadTreeItems();
 
 
     }
@@ -294,6 +320,33 @@ public class Controller implements Initializable {
         System.out.println(searchObject);
     }
 
+    /*
+    public void DBLoadTreeItems(){
+        TreeItem<String> root = new TreeItem<>("Snippet");
+        treeData.setEditable(true);
+        treeData.setShowRoot(false);
+
+        for (Snippet snippet : snippets){
+            TreeItem<String> snipLeaf = new TreeItem<>(snippet.getName());
+            boolean found = false;
+            for (TreeItem<String> childNode : root.getChildren()){
+                if(childNode.getValue().contentEquals(snippet.getDir())) {
+                    if (snippet.getSprache().contentEquals(snippet.getDir())) {
+                        childNode.getChildren().add(snipLeaf);
+                        found = true;
+                    }
+                }
+            }
+            if (!found){
+            if(snippet.getSprache().contentEquals(comboBoxLang.getValue())){
+                TreeItem childNote = new TreeItem(snippet.getDir());
+                root.getChildren().add(snipLeaf);
+                }
+
+            }
+        }
+    }
+    */
 
     // loads some strings into the tree in the application UI.
     public void FileNodeLoadTreeItems() {
@@ -490,6 +543,32 @@ public class Controller implements Initializable {
 
     public void initialize(URL url, ResourceBundle rb) {
 
+        //  ausgabe.aktualisierenLangAusgabe();
+        //  ausgabe.aktualisierenSnippetAusgabe();
+        //  ausgabe.aktualisierenTreeAusgabe();
+
+        /*
+        try {
+            connection = DBController.getConnection();
+            stat = connection.createStatement();
+            //stat.executeUpdate("drop table if exists user");
+            stat.executeUpdate("create table if not exists user(Name varchar(50),Email varchar(50));");
+            data = FXCollections.observableArrayList();
+            ResultSet rs = connection.createStatement().executeQuery("select * from user");
+            while (rs.next()) {
+                data.add(new UserData(rs.getString("Name"), rs.getString("Email")));
+            }
+            column1.setCellValueFactory(new PropertyValueFactory("Name"));
+            column2.setCellValueFactory(new PropertyValueFactory("Email"));
+            treeView.setItems(null);
+            treeView.setItems(data);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
+        }
+        */
+
 
         //list_of_snippet = new ArrayList<>();
 
@@ -518,6 +597,11 @@ public class Controller implements Initializable {
                 "C#"
 
         );
+        /*
+         *  ComboBoxLang wird mit ELementen aus der ObservableList DataLangAusgabe gefüllt
+         */
+//        comboBoxLang.setItems(ausgabe.getDataLangAusgabe());
+
 
         comboBoxLang.getSelectionModel().selectedItemProperty().addListener((selected, oldLang, newLang) -> {
             //    if (oldLang != null) {
@@ -564,6 +648,7 @@ public class Controller implements Initializable {
         });
 
     }
+
 
 }
 

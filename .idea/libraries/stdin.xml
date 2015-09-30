@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="stdin">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/stdin.jar!/" />
+      <root url="jar://$APPLICATION_CONFIG_DIR$/jdbc-drivers/sqlite-jdbc-3.8.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$APPLICATION_CONFIG_DIR$/jdbc-drivers/sqlite-jdbc-3.8.9.jar!/" />
+    </SOURCES>
+  </library>
+</component>
