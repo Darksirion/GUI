@@ -20,7 +20,8 @@ public class AusgabeDirectory extends DBController {
             PreparedStatement ps = con.prepareStatement("SELECT directoryName FROM directories");
             ResultSet rs = ps.executeQuery();
             while (rs.next())
-                dataTreeAusgabe.add(rs.getString("directoryName"));
+                    dataTreeAusgabe.add(rs.getString("directoryName"));
+
             rs.close();
             ps.close();
         } catch (Exception e) {

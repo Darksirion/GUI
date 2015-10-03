@@ -20,8 +20,11 @@ public class AusgabeLang extends DBController {
             PreparedStatement ps = con.prepareStatement("Select sprache from snippets");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                dataLangAusgabe.add(rs.getString("sprache"));
+                if (!dataLangAusgabe.equals(rs.getString("sprache"))) {
+                    dataLangAusgabe.add(rs.getString("sprache"));
+                }
             }
+
             rs.close();
             ps.close();
 

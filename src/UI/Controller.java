@@ -210,6 +210,12 @@ public class Controller implements Initializable {
     }
 
     public void testButtonClicked() {
+        String directoryName = textFieldSearch.getText();
+        String parent = "1";
+        String directoryID = "6";
+        DBController.getInstance().initDBConnection();
+        DBController.getInstance().insertDirectory(directoryID, directoryName, parent);
+        DBController.closeDBConnection();
         //  String test = dbc.getDirectoryName("1");
         //    System.out.println(test);
 
@@ -284,8 +290,7 @@ public class Controller implements Initializable {
         //System.out.println(selectedParentPath);
         String lang = comboBoxLang.getValue();
         Snippet snip = new Snippet(snippetID, directoryID, name, datum, code, lang, note, source, creator);
-        String dir = "2";
-        // dbc.insertSnippet(snip, dir);
+        dbc.insertSnippet(snip, directoryID);
 
 
         //      proxy.addSnippet(name, code, note, source, creator, selectedParentPath);
@@ -456,8 +461,6 @@ public class Controller implements Initializable {
         TreeItem<String> page = treeData.getSelectionModel().getSelectedItem();
         String each = page.getValue();
         createPage(each, page);
-        System.out.println(each);
-        System.out.println(page);
 
 
     }
@@ -493,6 +496,7 @@ public class Controller implements Initializable {
         ObservableList<String> snip = ad.directoryTree();
         for (String groupElement : snip)
             root.getChildren().add(new TreeItem<>(groupElement));
+
         treeData.setRoot(root);
         treeData.setShowRoot(false);
         treeData.setEditable(true);
