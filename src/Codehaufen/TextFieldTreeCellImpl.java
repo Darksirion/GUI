@@ -79,7 +79,7 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
             @Override
             public void handle(ActionEvent event) {
                 String deleteObject = getTreeItem().getValue();
-                boolean answer = Dialog.confirm("Löschung", "Wollen Sie den Ordner " + deleteObject + " wirklich löschen?");
+                boolean answer = Dialog.confirm("Löschung", "Wollen Sie den Directory " + deleteObject + " wirklich löschen?");
                 if (answer) {
                     TreeItem<String> selectedNode = getTreeItem();
                     if (selectedNode != null) {
@@ -172,7 +172,7 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
 
     }
 
-  /*  public String getName(){
+  /*  public String getSnippetName(){
         String name = controller.getNewSnippetName();
 
     }

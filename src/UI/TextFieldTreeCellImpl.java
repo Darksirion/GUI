@@ -212,7 +212,7 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
 
     }
 
-  /*  public String getName(){
+  /*  public String getSnippetName(){
         String name = controller.getNewSnippetName();
 
     }

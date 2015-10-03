@@ -3,7 +3,4 @@
 	<output-test url="file://$MODULE_DIR$/out/test/GUI"/>
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
-	<levels>
-		<level name="stdin" value="project"/>
-	</levels>
 </component>

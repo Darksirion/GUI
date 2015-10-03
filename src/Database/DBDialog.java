@@ -56,8 +56,8 @@ public class DBDialog {
 			dbc.createSnippetTable(table);
 		}
 		else if(cmd.equals(DELETE)) {
-			String key = Stdin.readlnString("Key eingeben: ");
-			dbc.deleteSnippet(key);
+			String directoryID = Stdin.readlnString("Key eingeben: ");
+			dbc.deleteSnippet(directoryID);
 			System.out.println("Snippet wurde geloescht.\n");
 		}
 		else if(cmd.equals(PRINT)) {
@@ -71,15 +71,15 @@ public class DBDialog {
 			dbc.createDirectoryTable(table);
 		}
 		else if(cmd.equals(INSERT_DIREC)) {
-			String key = Stdin.readlnString("key des Ordners: ");
+			String directoryID = Stdin.readlnString("directoryID des Ordners: ");
 			String name = Stdin.readlnString("name des Ordners: ");
 			String parent = Stdin.readlnString("parent: ");
-			dbc.insertDirectory(key, name, parent);
-			System.out.println("Ordner "+name+" wurde hinzugefuegt\n");
+			dbc.insertDirectory(directoryID, name, parent);
+			System.out.println("Directory " + name + " wurde hinzugefuegt\n");
 		}
 		else if(cmd.equals(DELETE_DIREC)) {
-			String key = Stdin.readlnString("key des Ordners: ");
-			dbc.deleteDirectory(key);
+			String directoryID = Stdin.readlnString("directoryID des Ordners: ");
+			dbc.deleteDirectory(directoryID);
 		}
 		else if(cmd.equals(PRINT_DIREC)){
 			dbc.showDirectories();
@@ -88,18 +88,18 @@ public class DBDialog {
 	
 	
 	private void insertSnippet() {
-		String ordner = Stdin.readlnString("\n\nKey des Ordners: ");
-		String primaryKey = Stdin.readlnString("Key eingeben: ");
-		String name = Stdin.readlnString("Name eingeben: ");
+		int directoryID = Integer.parseInt(Stdin.readlnString("\n\nKey des Ordners: "));
+		int snippetID = Integer.parseInt(Stdin.readlnString("Key eingeben: "));
+		String snippetName = Stdin.readlnString("Name eingeben: ");
 		String datum = Stdin.readlnString("Datum eingeben: ");
 		String code = Stdin.readlnString("Code eingeben: ");
 		String sprache = Stdin.readlnString("Sprache eingeben: ");
 		String notizen = Stdin.readlnString("Notizen eingeben: ");
 		String quellen = Stdin.readlnString("Quellen eingeben: ");
 		String author = Stdin.readlnString("Author eingeben: ");
-		Snippet snip = new Snippet(name, datum, code, sprache, notizen, quellen, author, primaryKey);
-		dbc.insertSnippet(snip,ordner);
-		System.out.println("Snippet "+name+ "wurde hinzugefuegt.\n\n");
+		Snippet snip = new Snippet(snippetID, directoryID, snippetName, datum, code, sprache, notizen, quellen, author);
+		dbc.insertSnippet(snip, directoryID);
+		System.out.println("Snippet " + snippetName + "wurde hinzugefuegt.\n\n");
 	}
 	
 	public static void main(String[] args) {

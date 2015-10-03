@@ -19,15 +19,15 @@ public class FileNode {
         File file = new File(root);
         this.name = file.getName();
 
-        // Es wird geschaut ob diese Node mit einem Ordner oder einer File verbunden ist
+        // Es wird geschaut ob diese Node mit einem Directory oder einer File verbunden ist
         if (file.isDirectory()) {
             isFile = false;
 
-            // Liste aller Files in diesem Ordner wird entnommen
+            // Liste aller Files in diesem Directory wird entnommen
             File[] lowerFiles = file.listFiles();
             children = new FileNode[lowerFiles.length];
 
-            // Aus jeder File in diesem Ordner wird eine neue Node erstellt
+            // Aus jeder File in diesem Directory wird eine neue Node erstellt
             for (int i = 0; i < children.length; i++)
                 children[i] = new FileNode(lowerFiles[i].getAbsolutePath());
         } else {

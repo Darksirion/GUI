@@ -24,7 +24,7 @@ public class DirectoryClassLoader implements ClassLoader {
     }
 
     /**
-     * Legt einen Ordner samt Ueberordner an
+     * Legt einen Directory samt Ueberordner an
      *
      * @param path Der Pfad des Ordners der erstellt werden soll
      */
@@ -60,7 +60,7 @@ public class DirectoryClassLoader implements ClassLoader {
         BufferedReader bufferedReader = new BufferedReader(reader);
 
         // Name
-        snip.setName(bufferedReader.readLine());
+        snip.setSnippetName(bufferedReader.readLine());
 
         // Author
         snip.setAuthor(bufferedReader.readLine());
@@ -102,7 +102,7 @@ public class DirectoryClassLoader implements ClassLoader {
         FileWriter writer = new FileWriter(file);
 
         // Name
-        writer.write(snip.getName() + "\n");
+        writer.write(snip.getSnippetName() + "\n");
 
         // Author
         writer.append(snip.getAuthor() + "\n");
@@ -137,18 +137,18 @@ public class DirectoryClassLoader implements ClassLoader {
             // Ist es eine normale File, wird diese geloescht
             file.delete();
         } else {
-            // Ist es ein Ordner, muss geschaut werden ob er Inhalt hat
+            // Ist es ein Directory, muss geschaut werden ob er Inhalt hat
             File[] inhalt = file.listFiles();
 
             if (inhalt.length == 0) {
-                // Gibt es keinen Inhalt, wird der Ordner geloescht
+                // Gibt es keinen Inhalt, wird der Directory geloescht
                 file.delete();
             } else {
                 // Ansonsten muss erst der inhalt geloescht werden
                 for (int i = 0; i < inhalt.length; i++)
                     deleteSnippet(inhalt[i].getAbsolutePath());
 
-                // Und am Ende wird der Ordner selbst geloescht
+                // Und am Ende wird der Directory selbst geloescht
                 file.delete();
             }
         }

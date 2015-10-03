@@ -111,7 +111,7 @@
         </VBox>
     </top>
     <left>
-        <TreeView fx:id="treeView" BorderPane.alignment="CENTER">
+        <TreeView fx:id="treeData" onMouseClicked="#selectedTree" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets left="2.0" right="1.0" top="2.0"/>
             </BorderPane.margin>

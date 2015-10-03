@@ -6,10 +6,11 @@ import Controll.Dialog;
 import Core.FileNode;
 import Core.Proxy;
 import Core.Snippet;
-import Database.Ausgabe;
+import Database.Ausgabe.AusgabeDirectory;
+import Database.Ausgabe.AusgabeLang;
+import Database.Ausgabe.AusgabeSnippets;
 import Database.DBController;
 import Test.PathItem;
-import Test.PathTreeItem;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,10 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -30,7 +28,6 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -89,7 +86,11 @@ public class Controller implements Initializable {
     MenuItem menuItemHelp;
     @FXML
     MenuItem menuItemAbout;
+    @FXML
+    TreeView<String> treeData;
 
+    TreeItem<String> root = new TreeItem<String>("DEPO");
+    Snippet sn = null;
 
 
     List<Programmer> programmers = Arrays.<Programmer>asList(
@@ -110,15 +111,15 @@ public class Controller implements Initializable {
     private StringProperty messageProp;
     private Connection connection;
     private DBController dbc;
-    private Ausgabe ausgabe;
+    // private Ausgabe ausgabe;
     private static Statement stat;
     private PreparedStatement prep;
     private ObservableList<Snippet> data;
-    private TreeView<String> treeData;
+
     // the FXML annotation tells the loader to inject this variable before invoking initialize.
     @FXML
     private TreeView<PathItem> treeView;
-    private String root;
+
 
     public Controller() {
         dbc = DBController.getInstance();
@@ -258,6 +259,8 @@ public class Controller implements Initializable {
     public void saveButtonSnippetClicked() {
         //save Snippet speichern und Tree neu initialisieren
         //  String name= textFieldSearch.getText();
+        int snippetID = 0;
+        int directoryID = 0;
         String name = textFieldNewSnippet.getText();
         String code = textAreaCode.getText();
         String note = textAreaNote.getText();
@@ -280,9 +283,9 @@ public class Controller implements Initializable {
         //     String selectedParentPath = /*test +"/"+comboBoxLang.getValue()+*/Path/*+name*/;
         //System.out.println(selectedParentPath);
         String lang = comboBoxLang.getValue();
-        Snippet snip = new Snippet(name, datum, code, lang, note, source, creator, primaryKey);
+        Snippet snip = new Snippet(snippetID, directoryID, name, datum, code, lang, note, source, creator);
         String dir = "2";
-        dbc.insertSnippet(snip, dir);
+        // dbc.insertSnippet(snip, dir);
 
 
         //      proxy.addSnippet(name, code, note, source, creator, selectedParentPath);
@@ -299,7 +302,7 @@ public class Controller implements Initializable {
         // System.out.println(createDate);
         //TODO
         backHomescreen();
-        FileNodeLoadTreeItems();
+//        FileNodeLoadTreeItems();
 
 
     }
@@ -320,48 +323,23 @@ public class Controller implements Initializable {
         System.out.println(searchObject);
     }
 
-    /*
-    public void DBLoadTreeItems(){
-        TreeItem<String> root = new TreeItem<>("Snippet");
-        treeData.setEditable(true);
-        treeData.setShowRoot(false);
 
-        for (Snippet snippet : snippets){
-            TreeItem<String> snipLeaf = new TreeItem<>(snippet.getName());
-            boolean found = false;
-            for (TreeItem<String> childNode : root.getChildren()){
-                if(childNode.getValue().contentEquals(snippet.getDir())) {
-                    if (snippet.getSprache().contentEquals(snippet.getDir())) {
-                        childNode.getChildren().add(snipLeaf);
-                        found = true;
-                    }
-                }
-            }
-            if (!found){
-            if(snippet.getSprache().contentEquals(comboBoxLang.getValue())){
-                TreeItem childNote = new TreeItem(snippet.getDir());
-                root.getChildren().add(snipLeaf);
-                }
 
-            }
-        }
-    }
-    */
+
 
     // loads some strings into the tree in the application UI.
     public void FileNodeLoadTreeItems() {
 
-        FileNode fileNode = proxy.loadTree(root);
-        String test2 = fileNode.getPrimaryKey();
+        //  FileNode fileNode = proxy.loadTree(root);
+        //String test2 = fileNode.getPrimaryKey();
         //System.out.println(test2);
 
         String test = "./New Directory";
         //messageProp.setValue(null);
-        rootPath = Paths.get(test2);
+        //  rootPath = Paths.get(test2);
         PathItem pathItem = new PathItem(rootPath);
         treeView.setEditable(true);
         treeView.setShowRoot(false);
-        treeView.setRoot(createNode(pathItem));
         treeView.setCellFactory((TreeView<PathItem> p) -> {
             final TextFieldTreeCellImpl cell = new TextFieldTreeCellImpl(messageProp, proxy);
 
@@ -371,43 +349,6 @@ public class Controller implements Initializable {
 
     }
 
-
-    public void loadTreeItems() {
-        TreeItem<String> root = new TreeItem<>("Snippet");
-        treeView.setEditable(true);
-
-        treeView.setShowRoot(false);
-
-
-        for (Programmer programmer : programmers) {
-            TreeItem<String> progLeaf = new TreeItem<>(programmer.getName());
-            boolean found = false;
-            for (TreeItem<String> groupNode : root.getChildren()) {
-                if (groupNode.getValue().contentEquals(programmer.getGroup())) {
-                    if (programmer.getLang().contentEquals(comboBoxLang.getValue())) {
-                        groupNode.getChildren().add(progLeaf);
-                        found = true;
-                    }
-                }
-            }
-            if (!found) {
-                if (programmer.getLang().contentEquals(comboBoxLang.getValue())) {
-                    TreeItem groupNode = new TreeItem(programmer.getGroup());
-                    root.getChildren().add(groupNode);
-                    groupNode.getChildren().add(progLeaf);
-                }
-            }
-        }
-
-        //  treeView.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
-        //    @Override
-        //     public TreeCell<String> call(TreeView<String> p) {
-        //         return new TextFieldTreeCellImpl(proxy);
-        //     }
-        //  });
-
-        //treeView.setRoot(root);
-    }
 
     public void newSnippet() {
         btnNew.setVisible(false);
@@ -445,32 +386,6 @@ public class Controller implements Initializable {
         textAreaNote.setEditable(false);
     }
 
-    /*public void showCode(TreeItem<PathItem> snippet) throws IOException {
-            if (snippet.getValue().equals(proxy.getSnippet(getSelectedObject()).getName())) {
-                System.out.println(snippet.getValue());
-                System.out.println(proxy.getSnippet(getSelectedObject()).getName());
-                textAreaCode.setText(proxy.getSnippet(getSelectedObject()).getCode());
-                textAreaNote.setText(proxy.getSnippet(getSelectedObject()).getNotizen());
-                textAreaSource.setText(proxy.getSnippet(getSelectedObject()).getQuellen());
-                textAreaCreator.setText(proxy.getSnippet(getSelectedObject()).getAuthor());
-                textFieldCreateDate.setText(proxy.getSnippet(getSelectedObject()).getDatum());
-            } else {
-
-            }
-    }
-    */
-
-    public String showCodeIndex() {
-        String select = comboBoxLang.getValue() + "/" + treeView.getSelectionModel().getSelectedIndex();
-        return select;
-    }
-
-    //   public void setMain(StartUI main) {
-    //      this.main = main;
-
-    // Add observable list data to the table
-    // personTable.setItems(mainApp.getPersonData());
-    //}
 
 
     public String getLang() {
@@ -536,111 +451,77 @@ public class Controller implements Initializable {
     }
 
 
-    private TreeItem<PathItem> createNode(PathItem pathItem) {
-        return PathTreeItem.createNode(pathItem);
+    @FXML
+    protected void selectedTree(MouseEvent m) {
+        TreeItem<String> page = treeData.getSelectionModel().getSelectedItem();
+        String each = page.getValue();
+        createPage(each, page);
+        System.out.println(each);
+        System.out.println(page);
+
+
     }
 
+    private void createPage(String snip, TreeItem<String> page) {
+        AusgabeSnippets as = new AusgabeSnippets();
+        ObservableList<String> snippetTree = as.snippetTree(snip);
+        if (snippetTree.size() > 0) {
+            for (int i = 0; i < root.getChildren().size(); i++)
+                if (root.getChildren().get(i).getChildren().size() > 0) {
+                    root.getChildren().get(i).getChildren().clear();
+                    break;
+                }
+            for (String snippetElement : snippetTree)
+                page.getChildren().add(new TreeItem<>(snippetElement));
+            page.setExpanded(true);
+        } else {
+            sn = as.snippetTree2(snip);
+            if (sn.getSnippetID() != 0) {
+                textAreaCode.setText(sn.getCode());
+                textAreaCreator.setText(sn.getAuthor());
+                textAreaNote.setText(sn.getNotizen());
+                textAreaSource.setText(sn.getQuellen());
+                textFieldCreateDate.setText(sn.getDatum());
+
+            }
+        }
+    }
 
     public void initialize(URL url, ResourceBundle rb) {
 
-        //  ausgabe.aktualisierenLangAusgabe();
-        //  ausgabe.aktualisierenSnippetAusgabe();
-        //  ausgabe.aktualisierenTreeAusgabe();
-
-        /*
-        try {
-            connection = DBController.getConnection();
-            stat = connection.createStatement();
-            //stat.executeUpdate("drop table if exists user");
-            stat.executeUpdate("create table if not exists user(Name varchar(50),Email varchar(50));");
-            data = FXCollections.observableArrayList();
-            ResultSet rs = connection.createStatement().executeQuery("select * from user");
-            while (rs.next()) {
-                data.add(new UserData(rs.getString("Name"), rs.getString("Email")));
-            }
-            column1.setCellValueFactory(new PropertyValueFactory("Name"));
-            column2.setCellValueFactory(new PropertyValueFactory("Email"));
-            treeView.setItems(null);
-            treeView.setItems(data);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error on Building Data");
-        }
-        */
+        AusgabeDirectory ad = new AusgabeDirectory();
+        ObservableList<String> snip = ad.directoryTree();
+        for (String groupElement : snip)
+            root.getChildren().add(new TreeItem<>(groupElement));
+        treeData.setRoot(root);
+        treeData.setShowRoot(false);
+        treeData.setEditable(true);
 
 
-        //list_of_snippet = new ArrayList<>();
-
-
-//        loadTreeItems();
-        //loadTreeItems("1", "2", "3","4","5");
-
-        /*
-       treeView.getSelectionModel().selectedItemProperty().addListener(
-                (selected, oldValue, newValue) -> {
-                    try {
-                        showCode(newValue);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-
-*/
 
         assert comboBoxLang != null : "fx:id=\"comboBoxLang\" was not injected: check your FXML file 'main.fxml'.";
 
-        comboBoxLang.getItems().addAll(
-                "VB",
-                "JavaFX",
-                "C",
-                "C#"
-
-        );
-        /*
-         *  ComboBoxLang wird mit ELementen aus der ObservableList DataLangAusgabe gefüllt
-         */
-//        comboBoxLang.setItems(ausgabe.getDataLangAusgabe());
+        AusgabeLang al = new AusgabeLang();
+        ObservableList<String> langList = al.langTree();
+        comboBoxLang.setItems(langList);
 
 
         comboBoxLang.getSelectionModel().selectedItemProperty().addListener((selected, oldLang, newLang) -> {
-            //    if (oldLang != null) {
-            //        switch (oldLang) {
-            //              case "Java":
-            //
-            //                break;
-            //            case "C":
-            //                break;
-            //            case "C#":
-            //                break;
-            //        }
-            //    }
-            //
 
             if (newLang != null) {
-                //System.out.println(newLang);
                 switch (newLang) {
                     case "JavaFX":
                         String lang = newLang;
-                        //System.out.println(newLang);
-                        FileNodeLoadTreeItems();
-                        //loadTreeItems();
                         break;
                     case "C":
                         lang = newLang;
-                        //System.out.println(newLang);
-
-                        loadTreeItems();
                         break;
                     case "C#":
                         lang = newLang;
-                        //System.out.println(newLang);
-                        lang = newLang;
-                        //loadTreeItems();
                         break;
                     case "VB":
                         lang = newLang;
-                        //loadTreeItems();
+
                 }
             }
 

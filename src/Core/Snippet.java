@@ -6,7 +6,9 @@ package Core;
  * @author Sven Manier
  */
 public class Snippet {
-    private String name;
+    private int snippetID;
+    private int directoryID;
+    private String snippetName;
     private String datum;
     private String code;
     private String sprache;
@@ -18,24 +20,27 @@ public class Snippet {
     /**
      * Konstruktor mit Uebergabe von Attributen
      *
-     * @param name
+     * @param snippetID
+     * @param directoryID
+     * @param snippetName
      * @param datum
      * @param code
      * @param sprache
      * @param notizen
      * @param quellen
      * @param author
-     * @param primaryKey
      */
-    public Snippet(String name, String datum, String code, String sprache, String notizen, String quellen, String author, String primaryKey) {
-        this.name = name;
+    public Snippet(int snippetID, int directoryID, String snippetName, String datum, String code, String sprache, String notizen, String quellen, String author/* ,String primaryKey */) {
+        this.snippetID = snippetID;
+        this.directoryID = directoryID;
+        this.snippetName = snippetName;
         this.datum = datum;
         this.code = code;
         this.sprache = sprache;
         this.notizen = notizen;
         this.quellen = quellen;
         this.author = author;
-        this.primaryKey = primaryKey;
+        //  this.primaryKey = primaryKey;
     }
 
     /**
@@ -45,12 +50,28 @@ public class Snippet {
 
     }
 
-    public String getName() {
-        return name;
+    public int getSnippetID() {
+        return snippetID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSnippetID(int snippetID) {
+        this.snippetID = snippetID;
+    }
+
+    public int getDirectoryID() {
+        return directoryID;
+    }
+
+    public void setDirectoryID(int directoryID) {
+        this.directoryID = directoryID;
+    }
+
+    public String getSnippetName() {
+        return snippetName;
+    }
+
+    public void setSnippetName(String snippetName) {
+        this.snippetName = snippetName;
     }
 
     public String getDatum() {

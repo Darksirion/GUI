@@ -30,10 +30,12 @@ public class Core {
 		String formatString = dateFormat.format(datum);
 
 		String sprache = proxy.getSprache();
+		int snippetID = 0;
+		int directoryID = 0;
 		try {
 			String newKey = parentPath +"/"+ name;
 
-			loader.saveSnippet(new Snippet(name, formatString, code, sprache, notizen, quellen, author, newKey));
+			loader.saveSnippet(new Snippet(snippetID, directoryID, name, formatString, code, sprache, notizen, quellen, author));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
