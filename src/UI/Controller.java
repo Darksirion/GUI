@@ -213,9 +213,8 @@ public class Controller implements Initializable {
         String directoryName = textFieldSearch.getText();
         String parent = "1";
         String directoryID = "6";
-        DBController.getInstance().initDBConnection();
-        DBController.getInstance().insertDirectory(directoryID, directoryName, parent);
-        DBController.closeDBConnection();
+        dbc.insertDirectory(directoryID, directoryName, parent);
+
         //  String test = dbc.getDirectoryName("1");
         //    System.out.println(test);
 
@@ -474,8 +473,8 @@ public class Controller implements Initializable {
                     root.getChildren().get(i).getChildren().clear();
                     break;
                 }
-            for (String snippetElement : snippetTree)
-                page.getChildren().add(new TreeItem<>(snippetElement));
+            for (String Element : snippetTree)
+                page.getChildren().add(new TreeItem<>(Element));
             page.setExpanded(true);
         } else {
             sn = as.snippetTree2(snip);
@@ -493,9 +492,10 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         AusgabeDirectory ad = new AusgabeDirectory();
+
         ObservableList<String> snip = ad.directoryTree();
-        for (String groupElement : snip)
-            root.getChildren().add(new TreeItem<>(groupElement));
+        for (String Element : snip)
+            root.getChildren().add(new TreeItem<>(Element));
 
         treeData.setRoot(root);
         treeData.setShowRoot(false);

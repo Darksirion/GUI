@@ -14,13 +14,14 @@ import java.sql.ResultSet;
  */
 public class AusgabeSnippets extends DBController {
 
-    public ObservableList<String> snippetTree(String name) {
+
+    public ObservableList<String> snippetTree(String directoryName) {
         ObservableList<String> dataSnippetAusgabe = FXCollections.observableArrayList();
         try {
             connect();
-            PreparedStatement ps = con.prepareStatement("Select directoryName from directories d,snippets s where "
+            PreparedStatement ps = con.prepareStatement("Select snippetName from directories d,snippets s where "
                     + "d.directoryName=? and d.directoryID=s.directoryID");
-            ps.setString(1, name);
+            ps.setString(1, directoryName);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 dataSnippetAusgabe.add(rs.getString("snippetName"));
