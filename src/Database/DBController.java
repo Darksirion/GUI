@@ -63,7 +63,8 @@ public class DBController {
     public void insertSnippet(Snippet snippet, int directoryID) {
         try {
             PreparedStatement ps = connection.prepareStatement
-                    ("INSERT INTO Snippets (DirectoryID, SnippetName, Datum, Code, Sprache, Notizen, Quellen, Author) VALUES(?,?,?,?,?,?,?,?);");
+                    ("INSERT INTO Snippets (DirectoryID, SnippetName, Datum, Code, Sprache, Notizen, Quellen, Author)" +
+                            " VALUES(?,?,?,?,?,?,?,?);");
             ps.setInt(1, directoryID);
             ps.setString(2, snippet.getSnippetName());
             ps.setString(3, snippet.getDatum());
@@ -136,12 +137,6 @@ public class DBController {
             ResultSet rs = snipStmt.executeQuery();
             while (rs.next()) {
                 deleteSnippet(rs.getString("snippetID"));
-            }
-            pStmt = connection.prepareStatement("SELECT * FROM directories WHERE parent = ?");
-            pStmt.setString(1, directoryID);
-            ResultSet set = pStmt.executeQuery();
-            while (set.next()) {
-                deleteDirectory(rs.getString("directoryID"));
             }
             dirStmt = connection.prepareStatement("DELETE FROM directories WHERE directoryID = ?");
             dirStmt.setString(1, directoryID);

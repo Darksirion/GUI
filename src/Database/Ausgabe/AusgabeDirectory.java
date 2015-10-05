@@ -17,7 +17,9 @@ public class AusgabeDirectory extends DBController {
         ObservableList<String> dataTreeAusgabe = FXCollections.observableArrayList();
         try {
             connect();
-            PreparedStatement ps = connection.prepareStatement("SELECT directoryName FROM directories");
+            //PreparedStatement ps = connection.prepareStatement("SELECT directoryName FROM directories d,snippets s WHERE s.sprache=? AND d.directoryID=s.directoryID GROUP BY directoryName");
+            //ps.setString(1,lang);
+            PreparedStatement ps = connection.prepareStatement("SELECT DirectoryName FROM Directories");
             ResultSet rs = ps.executeQuery();
             while (rs.next())
                     dataTreeAusgabe.add(rs.getString("directoryName"));

@@ -4,9 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="800" maxWidth="1000" minHeight="400" minWidth="700"
-            prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8" fx:controller="UI.Controller">
+<BorderPane maxHeight="800" maxWidth="1000" minHeight="400" minWidth="700" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Controller">
     <top>
         <VBox prefHeight="31.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
@@ -125,7 +124,7 @@
         </HBox>
     </bottom>
     <center>
-        <TextArea fx:id="textAreaCode" onMouseClicked="#SelectionAreaCode" text="Code" wrapText="true"
+        <TextArea fx:id="textAreaCode" onMouseClicked="#selectionAreaCode" text="Code" wrapText="true"
                   BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets left="1.0" right="1.0" top="2.0"/>
@@ -137,7 +136,7 @@
             <children>
                 <Label fx:id="labelNote" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="143.0"
                        text=" Notizen / Anmerkungen" textAlignment="CENTER" translateX="30.0"/>
-                <TextArea fx:id="textAreaNote" maxHeight="1.7976931348623157E308" onMouseClicked="#SelectionAreaNote"
+                <TextArea fx:id="textAreaNote" maxHeight="1.7976931348623157E308" onMouseClicked="#selectionAreaNote"
                           prefHeight="114.0" prefWidth="207.0" text="Anmerkung zu ausgewähltem &#10;Codeschnipsel"
                           wrapText="true" VBox.vgrow="SOMETIMES">
                     <VBox.margin>
@@ -166,7 +165,7 @@
                             </rowConstraints>
                             <children>
                                 <Label text="Quelle:"/>
-                                <TextArea fx:id="textAreaSource" onMouseClicked="#SelcetionAreaSource" prefWidth="155.0"
+                                <TextArea fx:id="textAreaSource" onMouseClicked="#selcetionAreaSource" prefWidth="155.0"
                                           GridPane.columnIndex="1">
                                     <GridPane.margin>
                                         <Insets bottom="2.0" right="2.0"/>
@@ -203,7 +202,7 @@
                             </rowConstraints>
                             <children>
                                 <Label text="Author:"/>
-                                <TextArea fx:id="textAreaCreator" onMouseClicked="#SelectionAreaCreator"
+                                <TextArea fx:id="textAreaCreator" onMouseClicked="#selectionAreaCreator"
                                           prefWidth="155.0" GridPane.columnIndex="1">
                                     <GridPane.margin>
                                         <Insets bottom="2.0" right="2.0" top="2.0"/>

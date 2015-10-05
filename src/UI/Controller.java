@@ -35,7 +35,6 @@ public class Controller implements Initializable {
 
     private static final String Versionsnummer = "0.1b";
     @FXML
-    public
     TextField textFieldNewSnippet;
     @FXML
     TextField textFieldSearch;
@@ -105,7 +104,7 @@ public class Controller implements Initializable {
 
 
     @FXML
-    public void handleButtonSettingAction(ActionEvent e) throws IOException {
+    private void handleButtonSettingAction(ActionEvent e) throws IOException {
 
         int[] setting2 = new int[]{0, 1, 0, 1};
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -229,10 +228,14 @@ public class Controller implements Initializable {
         int directoryID = getDirectoryID();
 
         if (directoryID != 0) {
+            if (name != null) {
             String lang = comboBoxLang.getValue();
             Snippet snip = new Snippet(snippetID, directoryID, name, createDate, code, lang, note, source, creator);
             dbc.insertSnippet(snip, directoryID);
             backHomescreen();
+            } else {
+                Dialog.information("Unvollständig", "Das zu erstellende Objekt besitzt keinen Namen!");
+            }
         } else {
             Dialog.information("Unvollständig", "Das ausgewählte Objekt " + selectedObject + "ist kein Ordner \n sondern ein Snippet!");
         }
@@ -281,7 +284,7 @@ public class Controller implements Initializable {
 
     }
 
-    public void backHomescreen() {
+    private void backHomescreen() {
         btnNew.setVisible(true);
         btnSearch.setVisible(true);
         btnSetting.setVisible(true);
@@ -307,26 +310,19 @@ public class Controller implements Initializable {
         return setting;
     }
 
-
-    public String getNewSnippetName() {
-        String newSnippetName = textFieldNewSnippet.getText();
-        return newSnippetName;
-    }
-
-
-    public void SelectionAreaCode() {
+    public void selectionAreaCode() {
         getSelectionAreaCode();
     }
 
-    public void SelcetionAreaSource() {
+    public void selcetionAreaSource() {
         getSelectionAreaSource();
     }
 
-    public void SelectionAreaCreator() {
+    public void selectionAreaCreator() {
         getSelectionCreator();
     }
 
-    public void SelectionAreaNote() {
+    public void selectionAreaNote() {
         getSelectionNote();
     }
 
@@ -405,8 +401,43 @@ public class Controller implements Initializable {
         }
     }
 
-    public void initialize(URL url, ResourceBundle rb) {
 
+    public void insertDirectory(String directoryName) {
+        dbc.insertDirectory(directoryName);
+    }
+
+    public void deleteDirectory() {
+        String directoryID = String.valueOf(getDirectoryID());
+        System.out.println(directoryID);
+        dbc.deleteDirectory(directoryID);
+    }
+
+    public void deleteSnippet() {
+        String snippetID = String.valueOf(getSnippetID());
+        System.out.println(snippetID);
+        dbc.deleteSnippet(snippetID);
+    }
+
+//    public void loadTree(String lang){
+//        AusgabeDirectory ad = new AusgabeDirectory();
+//
+//        ObservableList<String> snip = ad.directoryTree(lang);
+//        for (String Element : snip)
+//            root.getChildren().add(new TreeItem<>(Element));
+//
+//        treeData.setRoot(root);
+//        treeData.setShowRoot(false);
+//        treeData.setEditable(true);
+//        treeData.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
+//            @Override
+//            public TreeCell<String> call(TreeView<String> p) {
+//                return new TextFieldTreeCellImpl(proxy);
+//            }
+//        });
+//    }
+
+
+    public void initialize(URL url, ResourceBundle rb) {
         AusgabeDirectory ad = new AusgabeDirectory();
 
         ObservableList<String> snip = ad.directoryTree();
@@ -434,7 +465,6 @@ public class Controller implements Initializable {
         comboBoxLang.getSelectionModel().selectedItemProperty().addListener((observable, oldLang, newLang) -> {
             if (newLang != null) {
                 String lang = newLang;
-
             }
 
         });

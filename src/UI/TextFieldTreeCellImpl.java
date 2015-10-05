@@ -24,16 +24,17 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
 
     public TextFieldTreeCellImpl(Proxy proxy) {
         MenuItem addFileItem = new MenuItem("Add File");
-        MenuItem deleteFileItem = new MenuItem("Delete Delete");
+        MenuItem deleteFileItem = new MenuItem("Delete File");
         MenuItem addDirItem = new MenuItem("Add Directory");
         MenuItem deleteDirItem = new MenuItem("Delete Directory");
         FileMenu.getItems().addAll(deleteFileItem);
         DirMenu.getItems().addAll(addDirItem, deleteDirItem);
         dbc = DBController.getInstance();
         dbc.initDBConnection();
+
     /*    addFileItem.setOnAction(new EventHandler() {
             public void handle(Event t) {
-                String newSnippetName = "Test";
+                String newSnippetName = "Codehaufen.Test";
                 //controller.getNewSnippetName();
 
                 TreeItem newProgrammer =
@@ -81,6 +82,7 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
             public void handle(ActionEvent event) {
                 int directoryID = controller.getDirectoryID();
                 String directory = String.valueOf(directoryID);
+                System.out.println(directory);
                 String deleteObject = getTreeItem().getValue();
                 boolean answer = Dialog.confirm("Löschung", "Wollen Sie den Directory " + deleteObject + " wirklich löschen?");
                 if (answer) {
@@ -91,7 +93,7 @@ public class TextFieldTreeCellImpl extends TreeCell<String> {
                             parentNode.getChildren().remove(selectedNode);
                         }
                     }
-                    dbc.deleteDirectory(directory);
+                    controller.deleteDirectory();
                 }
             }
         });
