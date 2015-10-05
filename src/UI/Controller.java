@@ -233,6 +233,7 @@ public class Controller implements Initializable {
             Snippet snip = new Snippet(snippetID, directoryID, name, createDate, code, lang, note, source, creator);
             dbc.insertSnippet(snip, directoryID);
             backHomescreen();
+                treeData.refresh();
             } else {
                 Dialog.information("Unvollständig", "Das zu erstellende Objekt besitzt keinen Namen!");
             }
