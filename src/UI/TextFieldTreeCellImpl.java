@@ -2,124 +2,98 @@ package UI;
 
 import Controll.Dialog;
 import Core.Proxy;
-import Test.PathItem;
-import javafx.beans.property.StringProperty;
+import Database.DBController;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javafx.scene.input.KeyEvent;
 
 
 /**
  * Created by Darksirion on 16.09.15.
  */
-public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
+public class TextFieldTreeCellImpl extends TreeCell<String> {
 
     private TextField textField;
-    private Proxy proxy;
-    private StringProperty messageProp;
-    private Path editingPath;
     private Controller controller;
+    private DBController dbc;
     private ContextMenu FileMenu = new ContextMenu();
     private ContextMenu DirMenu = new ContextMenu();
 
-    public TextFieldTreeCellImpl(final StringProperty messageProp, Proxy proxy) {
-        this.messageProp = messageProp;
-        MenuItem editFileItem = new MenuItem("Edit File");
-        MenuItem deleteFileItem = new MenuItem("Delete File");
+    public TextFieldTreeCellImpl(Proxy proxy) {
+        MenuItem addFileItem = new MenuItem("Add File");
+        MenuItem deleteFileItem = new MenuItem("Delete Delete");
         MenuItem addDirItem = new MenuItem("Add Directory");
         MenuItem deleteDirItem = new MenuItem("Delete Directory");
-        FileMenu.getItems().addAll(editFileItem, deleteFileItem);
+        FileMenu.getItems().addAll(deleteFileItem);
         DirMenu.getItems().addAll(addDirItem, deleteDirItem);
-        /*addFileItem.setOnAction(new EventHandler() {
+        dbc = DBController.getInstance();
+        dbc.initDBConnection();
+    /*    addFileItem.setOnAction(new EventHandler() {
             public void handle(Event t) {
-                /*String newSnippetName = "Test";
+                String newSnippetName = "Test";
                 //controller.getNewSnippetName();
 
                 TreeItem newProgrammer =
                         new TreeItem<String>(newSnippetName);
                 getTreeItem().getChildren().add(newProgrammer);
 
-                Path newDir = createNewDirectory();
-                if (newDir != null) {
-                    TreeItem<PathItem> addItem = PathTreeItem.createNode(new PathItem(newDir));
-                    getTreeItem().getChildren().add(addItem);
-                }
-            }
-            private Path createNewDirectory() {
-                Path newDir = null;
-                while (true) {
-                    Path path = getTreeItem().getValue().getPath();
-                    newDir = Paths.get(path.toAbsolutePath().toString(), "newDirectory" + String.valueOf(getItem().getCountNewDir()));
-                    try {
-                        proxy.addDirectory(String.valueOf(newDir));
-                        Files.createDirectory(newDir);
-                        break;
-                    } catch (FileAlreadyExistsException ex) {
-                        continue;
-                    } catch (IOException ex) {
-                        cancelEdit();
-                        messageProp.setValue(String.format("Creating directory(%s) failed", newDir.getFileName()));
-                        break;
-                    }
-                }
-                return newDir;
-            }
 
-
+            }
         });
 */
-        editFileItem.setOnAction(t -> {
-            controller.newSnippet();
-            controller.textFieldNewSnippet.setText(getTreeView().getSelectionModel().getSelectedItem().getValue().toString());
+        addDirItem.setOnAction(new EventHandler() {
+            public void handle(Event t) {
+                TreeItem newProgrammer =
+                        new TreeItem<String>("New Directory");
+                getTreeItem().getParent().getChildren().add(newProgrammer);
 
-        });
-        addDirItem.setOnAction(t -> {
-            String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();
-            TreeItem newProgrammer =
-                    new TreeItem<>("New Directory");
-            getTreeItem().getParent().getChildren().add(newProgrammer);
-            //String Directory = String.valueOf(newProgrammer.getValue());
-            String Directory = showCodeIndex + "/" + newProgrammer;
-            System.out.println(showCodeIndex);
-            proxy.addDirectory(Directory);
-        });
-        deleteFileItem.setOnAction(event -> {
-            String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();
-            String deleteObject = getTreeItem().getValue().toString();
-            System.out.println(showCodeIndex);
-            boolean answer = Dialog.confirm("Löschung", "Wollen Sie " + deleteObject + " wirklich löschen?");
-            if (answer) {
-                TreeItem<PathItem> selectedNode = getTreeItem();
-                if (selectedNode != null) {
-                    TreeItem<PathItem> parentNode = selectedNode.getParent();
-                    if (parentNode != null) {
-                        System.out.println(selectedNode);
-                        parentNode.getChildren().remove(selectedNode);
-                    }
-                }
-                proxy.deleteSnippet(showCodeIndex);
+                String Directory = String.valueOf(newProgrammer.getValue());
+                System.out.println(Directory);
+
+                dbc.insertDirectory(Directory);
             }
-
         });
-        deleteDirItem.setOnAction(event -> {
-            String showCodeIndex = getTreeView().getSelectionModel().getSelectedItem().getValue().getPath().toString();
-            String deleteObject = String.valueOf(getTreeItem().getValue());
-            boolean answer = Dialog.confirm("Löschung", "Wollen Sie den Ordner " + deleteObject + " wirklich löschen?");
-            if (answer) {
-                TreeItem<PathItem> selectedNode = getTreeItem();
-                if (selectedNode != null) {
-                    TreeItem<PathItem> parentNode = selectedNode.getParent();
-                    if (parentNode == null) {
-                        parentNode.getChildren().remove(selectedNode);
+        deleteFileItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                int snippetID = controller.getSnippetID();
+                String snippet = String.valueOf(snippetID);
+                String deleteObject = getTreeItem().getValue();
+                boolean answer = Dialog.confirm("Löschung", "Wollen Sie " + deleteObject + " wirklich löschen?");
+                if (answer) {
+                    TreeItem<String> selectedNode = getTreeItem();
+                    if (selectedNode != null) {
+                        TreeItem<String> parentNode = selectedNode.getParent();
+                        if (parentNode != null) {
+                            parentNode.getChildren().remove(selectedNode);
+                        }
                     }
+                    dbc.deleteSnippet(snippet);
                 }
-                proxy.deleteDirectory(showCodeIndex);
-            }
 
+            }
+        });
+        deleteDirItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                int directoryID = controller.getDirectoryID();
+                String directory = String.valueOf(directoryID);
+                String deleteObject = getTreeItem().getValue();
+                boolean answer = Dialog.confirm("Löschung", "Wollen Sie den Directory " + deleteObject + " wirklich löschen?");
+                if (answer) {
+                    TreeItem<String> selectedNode = getTreeItem();
+                    if (selectedNode != null) {
+                        TreeItem<String> parentNode = selectedNode.getParent();
+                        if (parentNode == null) {
+                            parentNode.getChildren().remove(selectedNode);
+                        }
+                    }
+                    dbc.deleteDirectory(directory);
+                }
+            }
         });
         //editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
         //  @Override
@@ -134,44 +108,25 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
     @Override
     public void startEdit() {
         super.startEdit();
+
         if (textField == null) {
             createTextField();
         }
         setText(null);
         setGraphic(textField);
         textField.selectAll();
-        if (getItem() == null) {
-            editingPath = null;
-        } else {
-            editingPath = getItem().getPath();
-        }
-    }
-
-    @Override
-    public void commitEdit(PathItem pathItem) {
-        // rename the file or directory
-        if (editingPath != null) {
-            try {
-                Files.move(editingPath, pathItem.getPath());
-            } catch (IOException ex) {
-                cancelEdit();
-                messageProp.setValue(String.format("Renaming %s filed", editingPath.getFileName()));
-            }
-        }
-        super.commitEdit(pathItem);
     }
 
     @Override
     public void cancelEdit() {
         super.cancelEdit();
 
-        //setText((String) getItem());
-        setText(getString());
+        setText((String) getItem());
         setGraphic(getTreeItem().getGraphic());
     }
 
     @Override
-    public void updateItem(PathItem item, boolean empty) {
+    public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
 
         if (empty) {
@@ -189,11 +144,11 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
             } else {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
-                if (!getTreeItem().isLeaf()/*&&getTreeItem().getParent()!= null
+                if (/*!*/getTreeItem().isLeaf()/*&&getTreeItem().getParent()!= null
                         */) {
-                    setContextMenu(DirMenu);
-                } else {
                     setContextMenu(FileMenu);
+                } else {
+                    setContextMenu(DirMenu);
                 }
             }
         }
@@ -201,24 +156,28 @@ public class TextFieldTreeCellImpl extends TreeCell<PathItem> {
 
     private void createTextField() {
         textField = new TextField(getString());
-        textField.setOnKeyReleased(t -> {
-            if (t.getCode() == KeyCode.ENTER) {
-                Path path = Paths.get(getItem().getPath().getParent().toAbsolutePath().toString(), textField.getText());
-                commitEdit(new PathItem(path));
-            } else if (t.getCode() == KeyCode.ESCAPE) {
-                cancelEdit();
+        textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent t) {
+                if (t.getCode() == KeyCode.ENTER) {
+                    //Übergabe newName an proxy
+                    commitEdit(textField.getText());
+                    String oldObject = getTreeItem().getValue();
+                    //System.out.println(oldObject);
+
+                    String newObject = textField.getText();
+                    System.out.println(newObject);
+                } else if (t.getCode() == KeyCode.ESCAPE) {
+                    cancelEdit();
+                }
             }
         });
 
     }
 
-  /*  public String getSnippetName(){
-        String name = controller.getNewSnippetName();
-
-    }
-*/
 
     private String getString() {
-        return getItem().toString();
+        return getItem() == null ? "" : getItem().toString();
     }
 }

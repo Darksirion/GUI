@@ -17,7 +17,7 @@ public class AusgabeDirectory extends DBController {
         ObservableList<String> dataTreeAusgabe = FXCollections.observableArrayList();
         try {
             connect();
-            PreparedStatement ps = con.prepareStatement("SELECT directoryName FROM directories");
+            PreparedStatement ps = connection.prepareStatement("SELECT directoryName FROM directories");
             ResultSet rs = ps.executeQuery();
             while (rs.next())
                     dataTreeAusgabe.add(rs.getString("directoryName"));
@@ -36,7 +36,7 @@ public class AusgabeDirectory extends DBController {
         String dataTreeAusgabe = "";
         try {
             connect();
-            PreparedStatement ps = con.prepareStatement("Select directoryName from directories "
+            PreparedStatement ps = connection.prepareStatement("Select directoryName from directories "
                     + "where directoryID=?");
             ps.setInt(1, directoryID);
             ResultSet rs = ps.executeQuery();

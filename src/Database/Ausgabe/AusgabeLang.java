@@ -17,7 +17,7 @@ public class AusgabeLang extends DBController {
         ObservableList<String> dataLangAusgabe = FXCollections.observableArrayList();
         try {
             connect();
-            PreparedStatement ps = con.prepareStatement("Select sprache from snippets");
+            PreparedStatement ps = connection.prepareStatement("Select sprache from snippets");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 if (!dataLangAusgabe.equals(rs.getString("sprache"))) {

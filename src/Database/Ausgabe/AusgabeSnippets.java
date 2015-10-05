@@ -19,8 +19,8 @@ public class AusgabeSnippets extends DBController {
         ObservableList<String> dataSnippetAusgabe = FXCollections.observableArrayList();
         try {
             connect();
-            PreparedStatement ps = con.prepareStatement("Select snippetName from directories d,snippets s where "
-                    + "d.directoryName=? and d.directoryID=s.directoryID");
+            PreparedStatement ps = connection.prepareStatement("Select SnippetName from Directories d,Snippets s where "
+                    + "d.DirectoryName=? and d.DirectoryID=s.DirectoryID ");
             ps.setString(1, directoryName);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -41,8 +41,8 @@ public class AusgabeSnippets extends DBController {
         Snippet dataSnippetAusgabe = new Snippet();
         try {
             connect();
-            PreparedStatement ps = con.prepareStatement("Select * from directories d where "
-                    + "d.directoryName=?");
+            PreparedStatement ps = connection.prepareStatement("Select * from Snippets s where "
+                    + "s.SnippetName=?");
             ps.setString(1, snippetName);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
